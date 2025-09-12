@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessories - Teamz Adore Business Hub</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #f8e1e7;
+            --secondary: #d8a1b6;
+            --accent: #e83e8c;
+            --dark: #3a3a3a;
+            --light: #ffffff;
+        }
+        
+        body {
+            background-color: #fefefe;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--dark);
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover .logo-img {
+            transform: scale(1.1);
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .logo-text span {
+            color: var(--accent);
+        }
+        
+        .breadcrumb {
+            background-color: var(--primary);
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+        
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .breadcrumb a {
+            color: var(--dark);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--accent);
+        }
+        
+        .breadcrumb i {
+            color: var(--accent);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-title h1 {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .page-title p {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        
+        /* Large Desktop Styles */
+        @media (min-width: 1400px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 20px;
+            }
+        }
+        
+        /* Desktop Styles */
+        @media (max-width: 1399px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 18px;
+            }
+        }
+        
+        /* Tablet Styles - Same as categories */
+        @media (max-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+        
+        /* Small Mobile Styles */
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+        
+        /* Extra Small Mobile - Still 2 columns */
+        @media (max-width: 360px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+        }
+        
+        /* Specific breakpoint for 430px screens */
+        @media (max-width: 430px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .product-img {
+                height: 180px;
+            }
+            
+            .product-details {
+                padding: 12px;
+            }
+            
+            .product-title {
+                font-size: 14px;
+            }
+            
+            .product-description {
+                font-size: 11px;
+                -webkit-line-clamp: 2;
+            }
+            
+            .product-price {
+                font-size: 16px;
+            }
+            
+            .product-category {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+        }
+        
+        .product {
+            background-color: var(--light);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 140px;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-img {
+            position: relative;
+            overflow: hidden;
+            height: 300px;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .product:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(232, 62, 140, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .product:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .product-btn {
+            background-color: var(--light);
+            color: var(--accent);
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .product-btn:hover {
+            background-color: var(--accent);
+            color: var(--light);
+        }
+        
+        .product-details {
+            padding: 25px;
+        }
+        
+        .product-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .product-stock {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: var(--light);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .empty-state i {
+            font-size: 80px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .empty-state p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--light);
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #ce2c78;
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-state {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: #ffe6e6;
+            border-radius: 15px;
+            border: 2px solid #ffcccc;
+        }
+        
+        .error-state i {
+            font-size: 60px;
+            color: #ff4444;
+            margin-bottom: 20px;
+        }
+        
+        .error-state h2 {
+            color: #cc0000;
+            margin-bottom: 15px;
+        }
+        
+        .error-state p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 36px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .product-img {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="logo.jpg" alt="Teamz Adore Logo" class="logo-img">
+                    <span class="logo-text">Teamz <span>Adore</span></span>
+                </a>
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Accessories</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Accessories</h1>
+            <p>Discover our elegant collection of accessories</p>
+        </div>
+
+        <div id="products-container">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading accessories...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmDGQC3hsDoHvepmlHkvimX8DUg0X-hYY",
+            authDomain: "teamz-adore-d76ad.firebaseapp.com",
+            projectId: "teamz-adore-d76ad",
+            storageBucket: "teamz-adore-d76ad.firebasestorage.app",
+            messagingSenderId: "99067685820",
+            appId: "1:99067685820:web:62cda395f0a1ebc99fd9b9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Helper function to get product image (handles base64 and placeholder)
+        function getProductImage(imageUrl) {
+            if (!imageUrl) {
+                return 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=No+Image';
+            }
+            
+            if (imageUrl.startsWith('data:image/')) {
+                return imageUrl;
+            } else if (imageUrl.startsWith('https://via.placeholder.com/')) {
+                return imageUrl;
+            } else {
+                return 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=No+Image';
+            }
+        }
+
+        // Create product element
+        function createProductElement(product) {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            
+            productDiv.innerHTML = `
+                <div class="product-img">
+                    <img src="${getProductImage(product.imageUrl)}" alt="${product.name}" loading="lazy">
+                    <div class="product-overlay">
+                        <a href="#" class="product-btn" onclick="orderViaWhatsApp('${product.name}', ${product.price})">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-price">₦${product.price.toLocaleString()}</p>
+                    <p class="product-stock">Stock: ${product.stock}</p>
+                </div>
+            `;
+            
+            return productDiv;
+        }
+
+        // Function to handle orders via WhatsApp
+        function orderViaWhatsApp(productName, price) {
+            const message = `Hello Teamz Adore Business Hub! 👋
+
+I'm interested in ordering:
+📦 Product: ${productName}
+💰 Price: ₦${price.toLocaleString()}
+
+Please provide me with:
+- Available sizes
+- Delivery information
+- Payment options
+
+Thank you! 😊`;
+            const whatsappURL = `https://wa.me/2348139106521?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Load accessories from Firebase
+        async function loadAccessories() {
+            try {
+                console.log('Loading accessories from Firebase...');
+                const productsContainer = document.getElementById('products-container');
+                
+                // Show loading state
+                productsContainer.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading accessories...</p>
+                    </div>
+                `;
+
+                // Fetch accessories from Firebase
+                const accessoriesSnapshot = await db.collection('products')
+                    .where('category', '==', 'accessories')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                console.log('Accessories snapshot:', accessoriesSnapshot);
+                console.log('Number of accessories:', accessoriesSnapshot.size);
+                
+                if (accessoriesSnapshot.empty) {
+                    console.log('No accessories found');
+                    productsContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-gem"></i>
+                            <h2>No Accessories Available</h2>
+                            <p>We're working on adding more elegant accessories to our collection. Check back soon!</p>
+                            <a href="index.html" class="back-btn">Back to Home</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Clear loading and render accessories
+                productsContainer.innerHTML = '';
+                accessoriesSnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    console.log('Processing accessory:', product);
+                    const productElement = createProductElement(product);
+                    productsContainer.appendChild(productElement);
+                });
+                
+                console.log('Accessories loaded successfully');
+
+            } catch (error) {
+                console.error('Error loading accessories:', error);
+                console.error('Error details:', error.message);
+                document.getElementById('products-container').innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Error Loading Accessories</h2>
+                        <p>We're having trouble loading our accessories collection. Please try again later.</p>
+                        <a href="index.html" class="back-btn">Back to Home</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Load accessories when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAccessories();
+        });
+
+        // Make functions globally available
+        window.orderViaWhatsApp = orderViaWhatsApp;
+    </script>
+</body>
+</html>

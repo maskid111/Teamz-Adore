@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teamz Adore | Boutique Fashion</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #f8e1e7;
+            --secondary: #d8a1b6;
+            --accent: #e83e8c;
+            --dark: #3a3a3a;
+            --light: #ffffff;
+        }
+        
+        body {
+            background-color: #fefefe;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--dark);
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover .logo-img {
+            transform: scale(1.1);
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .logo-text span {
+            color: var(--dark);
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        /* Tablet Styles */
+        @media (max-width: 1024px) {
+            .main-nav {
+                gap: 20px;
+            }
+            
+            .nav-menu, .nav-categories {
+                gap: 8px;
+            }
+            
+            .nav-menu li a, .nav-categories li a {
+                padding: 5px 8px;
+                font-size: 13px;
+            }
+        }
+        
+        /* Small Tablet Styles */
+        @media (max-width: 900px) {
+            .main-nav {
+                gap: 15px;
+            }
+            
+            .nav-section-title {
+                font-size: 10px;
+            }
+            
+            .nav-menu, .nav-categories {
+                gap: 6px;
+            }
+            
+            .nav-menu li a, .nav-categories li a {
+                padding: 4px 6px;
+                font-size: 12px;
+            }
+        }
+        
+        /* Medium Mobile Styles */
+        @media (max-width: 600px) {
+            .header-content {
+                padding: 15px 0;
+            }
+            
+            .main-nav {
+                gap: 10px;
+            }
+            
+            .nav-section-title {
+                font-size: 9px;
+            }
+            
+            .nav-menu, .nav-categories {
+                gap: 4px;
+            }
+            
+            .nav-menu li a, .nav-categories li a {
+                padding: 3px 5px;
+                font-size: 11px;
+            }
+        }
+        
+        .main-nav {
+            display: flex;
+            gap: 30px;
+            position: relative;
+            align-items: flex-start;
+        }
+        
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+        
+        /* Hide categories section on desktop */
+        .nav-section:last-child {
+            display: none;
+        }
+        
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid var(--accent);
+            white-space: nowrap;
+        }
+        
+        .nav-menu, .nav-categories {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-menu li, .nav-categories li {
+            margin: 0;
+            flex-shrink: 0;
+        }
+        
+        .nav-menu li a, .nav-categories li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 6px 10px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 14px;
+            white-space: nowrap;
+            display: block;
+        }
+        
+        .nav-menu li a:hover, .nav-categories li a:hover {
+            color: var(--accent);
+            background-color: rgba(232, 62, 140, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .nav-menu li a::after, .nav-categories li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+        
+        .nav-menu li a:hover::after, .nav-categories li a:hover::after {
+            width: 70%;
+        }
+        
+        nav ul li a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .whatsapp-icon {
+            color: #25D366;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+        
+        .whatsapp-icon:hover {
+            color: #128C7E;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1773&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>') no-repeat center center;
+            background-size: cover;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: slideInDown 1s ease-out;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--light);
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            animation: slideInUp 1s ease-out 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            background-color: #ce2c78;
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Categories Section */
+        .section-title {
+            text-align: center;
+            margin: 50px 0 30px;
+            font-size: 32px;
+            color: var(--dark);
+        }
+        
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        
+        .category {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        
+        .category img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .category:hover img {
+            transform: scale(1.1);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 25px 20px 20px;
+            color: var(--light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .category:hover .category-overlay {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .category-overlay h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
+        }
+        
+        .category-overlay a {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #ff6b9d);
+            color: var(--light);
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-overlay a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .category-overlay a:hover::before {
+            left: 100%;
+        }
+        
+        .category-overlay a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232, 62, 140, 0.4);
+            background: linear-gradient(135deg, #ff6b9d, var(--accent));
+        }
+        
+        .category-overlay a:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+        }
+        
+        /* Products Section */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .product {
+            background-color: var(--light);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .product:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-img {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(232, 62, 140, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .product:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .product-btn {
+            background-color: var(--light);
+            color: var(--accent);
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .product-btn:hover {
+            background-color: var(--accent);
+            color: var(--light);
+            transform: scale(1.05);
+        }
+        
+        .product-details {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        
+        .product-stock {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+        }
+        
+        /* About Section */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 50px 0;
+            align-items: center;
+        }
+        
+        .about-img {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .about-content h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .about-content p {
+            margin-bottom: 15px;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            background-color: var(--primary);
+            padding: 50px 0;
+            margin: 50px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .testimonial {
+            background-color: var(--light);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        /* Newsletter */
+        .newsletter {
+            background-color: var(--secondary);
+            padding: 50px 0;
+            text-align: center;
+            color: var(--light);
+            margin: 50px 0;
+        }
+        
+        .newsletter h2 {
+            margin-bottom: 20px;
+        }
+        
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 25px;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+        }
+        
+        .newsletter-form button {
+            background-color: var(--accent);
+            color: var(--light);
+            border: none;
+            padding: 0 25px;
+            border-radius: 0 30px 30px 0;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icons a {
+            color: var(--light);
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 99;
+            transition: transform 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 15px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .categories, .products, .testimonial-grid, .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .about {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 42px;
+            }
+        }
+        
+        /* iPad Air and similar tablets - ALWAYS 2 columns for products */
+        @media (max-width: 1024px) {
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .logo {
+                justify-content: center;
+                order: 1;
+            }
+            
+            .logo-img {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .logo-text {
+                font-size: 24px;
+            }
+            
+            .main-nav {
+                width: 100%;
+                order: 3;
+                margin-top: 0;
+                flex-direction: column;
+                gap: 15px;
+                display: none;
+            }
+            
+            .main-nav.active {
+                display: flex;
+            }
+            
+            .nav-section {
+                width: 100%;
+            }
+            
+            /* Show categories section on mobile */
+            .nav-section:last-child {
+                display: flex;
+            }
+            
+            .nav-section-title {
+                font-size: 12px;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-menu, .nav-categories {
+                flex-direction: column;
+                background-color: var(--light);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                padding: 15px;
+                gap: 8px;
+            }
+            
+            .nav-menu li, .nav-categories li {
+                margin: 0;
+                width: 100%;
+            }
+            
+            .nav-menu li a, .nav-categories li a {
+                display: block;
+                padding: 12px 15px;
+                border-radius: 8px;
+                text-align: center;
+                font-size: 14px;
+            }
+            
+            .icons {
+                order: 2;
+            }
+            
+            .hero {
+                height: 60vh;
+                padding: 20px 0;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+                margin-bottom: 15px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+                margin-bottom: 25px;
+            }
+            
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .category-overlay {
+                padding: 20px 15px 15px;
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .category-overlay h3 {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            
+            .category-overlay a {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+            
+            .products, .testimonial-grid, .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .category {
+                height: 200px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+                margin: 40px 0 25px;
+            }
+            
+            .about {
+                gap: 30px;
+            }
+            
+            .about-content h2 {
+                font-size: 28px;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .newsletter-form input {
+                border-radius: 30px;
+            }
+            
+            .newsletter-form button {
+                border-radius: 30px;
+                padding: 12px 25px;
+            }
+            
+            /* Enhanced mobile product styling */
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .product-img {
+                height: 200px;
+            }
+            
+            .product-details {
+                padding: 15px;
+            }
+            
+            .product-title {
+                font-size: 16px;
+            }
+            
+            .product-description {
+                font-size: 13px;
+                -webkit-line-clamp: 2;
+            }
+            
+            .product-price {
+                font-size: 18px;
+            }
+            
+            .product-category {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 14px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .category {
+                height: 180px;
+            }
+            
+            /* Single column layout for very small screens */
+            .products {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .product-details {
+                padding: 15px;
+            }
+            
+            .product-title {
+                font-size: 16px;
+            }
+            
+            .product-description {
+                font-size: 14px;
+                -webkit-line-clamp: 3;
+            }
+            
+            .product-price {
+                font-size: 18px;
+            }
+            
+            .product-category {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+            
+            .about-content h2 {
+                font-size: 24px;
+            }
+            
+            .testimonial {
+                padding: 20px;
+            }
+            
+            .footer-content {
+                gap: 20px;
+            }
+            
+            /* Test buttons mobile styling */
+            .test-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .test-buttons button {
+                width: 100%;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <img src="logo.jpg" alt="Teamz Adore Logo" class="logo-img">
+                    <span class="logo-text">Teamz <span>Adore</span></span>
+                </a>
+                <nav class="main-nav">
+                    <div class="nav-section">
+                        <h4 class="nav-section-title">MENU</h4>
+                        <ul class="nav-menu">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-section">
+                        <h4 class="nav-section-title">CATEGORIES</h4>
+                        <ul class="nav-categories">
+                            <li><a href="female-shoes.html">Female Shoes</a></li>
+                            <li><a href="male-shoes.html">Male Shoes</a></li>
+                            <li><a href="bags.html">Bags</a></li>
+                            <li><a href="accessories.html">Accessories</a></li>
+                            <li><a href="wears.html">Wears</a></li>
+                            <li><a href="skincare.html">Skincare</a></li>
+                            <li><a href="hair.html">Hair</a></li>
+                            <li><a href="perfume.html">Perfume</a></li>
+                            <li><a href="fabric.html">Fabric</a></li>
+                            <li><a href="others.html">Others</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="icons">
+                    <button class="mobile-menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Discover Your Unique Style</h1>
+                <p>Elevate your wardrobe with our curated collection of trendy and feminine fashion pieces.</p>
+                <a href="shop.html" class="btn">Shop Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="container">
+        <h2 class="section-title">Shop By Category</h2>
+        <div class="categories">
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Female Shoes">
+                <div class="category-overlay">
+                    <h3>Female Shoes</h3>
+                    <a href="female-shoes.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Male Shoes">
+                <div class="category-overlay">
+                    <h3>Male Shoes</h3>
+                    <a href="male-shoes.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Bags">
+                <div class="category-overlay">
+                    <h3>Bags</h3>
+                    <a href="bags.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1611010344444-5f9e4d86a6e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Accessories">
+                <div class="category-overlay">
+                    <h3>Accessories</h3>
+                    <a href="accessories.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Wears">
+                <div class="category-overlay">
+                    <h3>Wears</h3>
+                    <a href="wears.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Skincare">
+                <div class="category-overlay">
+                    <h3>Skincare</h3>
+                    <a href="skincare.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Hair">
+                <div class="category-overlay">
+                    <h3>Hair</h3>
+                    <a href="hair.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Perfume">
+                <div class="category-overlay">
+                    <h3>Perfume</h3>
+                    <a href="perfume.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Fabric">
+                <div class="category-overlay">
+                    <h3>Fabric</h3>
+                    <a href="fabric.html">View Collection</a>
+                </div>
+            </div>
+            <div class="category">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Others">
+                <div class="category-overlay">
+                    <h3>Others</h3>
+                    <a href="others.html">View Collection</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="container" id="products">
+        <h2 class="section-title">New Arrivals</h2>
+        <div class="test-buttons" style="text-align: center; margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <button onclick="testFirebaseConnection()" style="padding: 10px 20px; background: #e83e8c; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s;">Test Firebase</button>
+            <button onclick="loadProducts()" style="padding: 10px 20px; background: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s;">Reload Products</button>
+        </div>
+        <div class="products" id="products-container">
+            <div class="loading" style="text-align: center; padding: 50px;">
+                <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #e83e8c; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                Loading products...
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="container">
+        <div class="about">
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1566206091558-7f218b696731?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="About Teamz Adore">
+            </div>
+            <div class="about-content">
+                <h2>About Teamz Adore Business Hub</h2>
+                <p>Founded in 2020, Teamz Adore Business Hub was born from a passion for making stylish fashion accessible to everyone. We believe that looking your best shouldn't break the bank.</p>
+                <p>Our team carefully curates each collection to bring you the latest trends while maintaining quality and affordability. We're committed to providing exceptional customer service and a seamless shopping experience.</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <p class="testimonial-text">"I absolutely love the dress I ordered! The quality exceeded my expectations and the fit was perfect. Will definitely be shopping here again!"</p>
+                    <p class="testimonial-author">- Monijesu A.</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"The ordering process via WhatsApp was so simple and the customer service was excellent. My package arrived sooner than expected!"</p>
+                    <p class="testimonial-author">- Ann O.</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"I'm always hesitant to order clothes online, but Teamz Adore's accurate sizing descriptions made it easy. Love my new outfit!"</p>
+                    <p class="testimonial-author">- Kathleen A.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Be the first to know about new arrivals, exclusive offers, and fashion tips.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email address">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <img src="logo.jpg" alt="Teamz Adore Logo" class="footer-logo-img">
+                        <h3>Teamz Adore Business Hub</h3>
+                    </div>
+                    <p>Fashion that makes you feel confident and beautiful without breaking the bank.</p>
+                    <p><strong>Email:</strong> Teamzadore@gmail.com</p>
+                    <p><strong>WhatsApp:</strong> +2348139106521</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Shop</h3>
+                    <ul>
+                        <li><a href="#products">New Arrivals</a></li>
+                        <li><a href="female-shoes.html">Female Shoes</a></li>
+                        <li><a href="male-shoes.html">Male Shoes</a></li>
+                        <li><a href="bags.html">Bags</a></li>
+                        <li><a href="accessories.html">Accessories</a></li>
+                        <li><a href="wears.html">Wears</a></li>
+                        <li><a href="skincare.html">Skincare</a></li>
+                        <li><a href="hair.html">Hair</a></li>
+                        <li><a href="perfume.html">Perfume</a></li>
+                        <li><a href="fabric.html">Fabric</a></li>
+                        <li><a href="others.html">Others</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Help</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Teamz Adore Business Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/1234567890?text=Hi!%20I'm%20interested%20in%20shopping%20at%20Teamz%20Adore" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmDGQC3hsDoHvepmlHkvimX8DUg0X-hYY",
+            authDomain: "teamz-adore-d76ad.firebaseapp.com",
+            projectId: "teamz-adore-d76ad",
+            storageBucket: "teamz-adore-d76ad.firebasestorage.app",
+            messagingSenderId: "99067685820",
+            appId: "1:99067685820:web:62cda395f0a1ebc99fd9b9"
+        };
+
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+            
+            // Configure Firestore settings
+            db.settings({
+                cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+            });
+            
+            // Enable network
+            db.enableNetwork().then(() => {
+                console.log('Firebase Firestore network enabled');
+            }).catch((error) => {
+                console.error('Error enabling Firestore network:', error);
+            });
+            
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Error initializing Firebase:', error);
+        }
+
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const nav = document.querySelector('.main-nav');
+            
+            if (mobileMenuToggle && nav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    nav.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    if (nav.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+                
+                // Close menu when clicking on a link
+                const navLinks = nav.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        nav.classList.remove('active');
+                        const icon = mobileMenuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!nav.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                        nav.classList.remove('active');
+                        const icon = mobileMenuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+
+            // Load products from Firebase
+            loadProducts();
+        });
+        
+        // Load products from Firebase
+        async function loadProducts() {
+            try {
+                console.log('Starting to load products...');
+                const productsContainer = document.getElementById('products-container');
+                
+                if (!productsContainer) {
+                    console.error('Products container not found!');
+                    return;
+                }
+                
+                // Show loading state
+                productsContainer.innerHTML = `
+                    <div class="loading" style="text-align: center; padding: 50px;">
+                        <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #e83e8c; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                        Loading products...
+                    </div>
+                `;
+
+                // Check if Firebase is initialized
+                if (!firebase.apps.length) {
+                    throw new Error('Firebase not initialized');
+                }
+                
+                const db = firebase.firestore();
+                console.log('Firebase app:', firebase.app());
+                console.log('Firestore instance:', db);
+                
+                // Test connection first
+                console.log('Testing Firestore connection...');
+                await db.enableNetwork();
+                console.log('Firestore network enabled');
+                
+                // Fetch products from Firebase using compatible syntax
+                console.log('Fetching products from Firebase...');
+                console.log('Querying collection: products');
+                
+                const productsSnapshot = await db.collection('products').orderBy('createdAt', 'desc').limit(8).get();
+                console.log('Products snapshot:', productsSnapshot);
+                console.log('Snapshot empty:', productsSnapshot.empty);
+                console.log('Number of products:', productsSnapshot.size);
+                console.log('Snapshot docs:', productsSnapshot.docs);
+                
+                if (productsSnapshot.empty) {
+                    console.log('No products found in database');
+                    productsContainer.innerHTML = `
+                        <div class="loading" style="text-align: center; padding: 50px;">
+                            <h3>No products available</h3>
+                            <p>We're working on adding new products. Check back soon!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Clear loading and render products
+                productsContainer.innerHTML = '';
+                console.log('Rendering products...');
+                
+                productsSnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    console.log('Processing product:', product);
+                    console.log('Product ID:', doc.id);
+                    console.log('Product data:', product);
+                    
+                    const productElement = createProductElement(product);
+                    productsContainer.appendChild(productElement);
+                });
+                
+                console.log('Products loaded and rendered successfully');
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                console.error('Error details:', error.message);
+                console.error('Error code:', error.code);
+                console.error('Full error:', error);
+                
+                const productsContainer = document.getElementById('products-container');
+                if (productsContainer) {
+                    productsContainer.innerHTML = `
+                        <div class="loading" style="text-align: center; padding: 50px;">
+                            <h3>Error Loading Products</h3>
+                            <p>We're having trouble loading our products. Please try again later.</p>
+                            <p style="font-size: 12px; color: #666;">Error: ${error.message}</p>
+                            <button onclick="loadProducts()" style="margin-top: 10px; padding: 10px 20px; background: #e83e8c; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Helper function to get product image (handles base64 and placeholder)
+        function getProductImage(imageUrl) {
+            if (!imageUrl) {
+                return 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=No+Image';
+            }
+            
+            if (imageUrl.startsWith('data:image/')) {
+                // Base64 image
+                return imageUrl;
+            } else if (imageUrl.startsWith('https://via.placeholder.com/')) {
+                // Placeholder image
+                return imageUrl;
+            } else {
+                // Fallback
+                return 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=No+Image';
+            }
+        }
+
+        // Create product element
+        function createProductElement(product) {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            
+            console.log('Creating product element for:', product.name, 'Category:', product.category);
+            
+            // Format description with fallback
+            const description = product.description || 'Beautiful fashion piece from Teamz Adore';
+            const stock = product.stock || 0;
+            const category = product.category || 'general';
+            
+            productDiv.innerHTML = `
+                <div class="product-img">
+                    <img src="${getProductImage(product.imageUrl)}" alt="${product.name}" loading="lazy">
+                    <div class="product-overlay">
+                        <a href="#" class="product-btn" onclick="orderViaWhatsApp('${product.name}', ${product.price})">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-category">${category}</div>
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-description">${description}</p>
+                    <p class="product-price">₦${product.price.toLocaleString()}</p>
+                    <p class="product-stock">Stock: ${stock} available</p>
+                </div>
+            `;
+            
+            return productDiv;
+        }
+        
+        // Function to handle orders via WhatsApp
+        function orderViaWhatsApp(productName, price) {
+            const message = `Hello Teamz Adore Business Hub! 👋
+
+I'm interested in ordering:
+📦 Product: ${productName}
+💰 Price: ₦${price ? price.toLocaleString() : 'Price on request'}
+
+Please provide me with:
+- Available sizes
+- Delivery information
+- Payment options
+
+Thank you! 😊`;
+            const whatsappURL = `https://wa.me/2348139106521?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+        
+        // Simple form validation for newsletter
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            if (email && email.includes('@')) {
+                alert('Thanks for subscribing to our newsletter!');
+                this.querySelector('input').value = '';
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                // Only process if href is not just "#"
+                if (href && href !== '#') {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Category filtering removed - using separate pages now
+
+        // Test Firebase connection
+        async function testFirebaseConnection() {
+            try {
+                console.log('Testing Firebase connection...');
+                const db = firebase.firestore();
+                await db.enableNetwork();
+                console.log('Firebase connection successful');
+                
+                // Try to read from products collection
+                const testSnapshot = await db.collection('products').limit(1).get();
+                console.log('Test query successful. Products count:', testSnapshot.size);
+                
+                return true;
+            } catch (error) {
+                console.error('Firebase connection test failed:', error);
+                return false;
+            }
+        }
+
+        // Make functions globally available
+        window.orderViaWhatsApp = orderViaWhatsApp;
+        window.loadProducts = loadProducts;
+        window.testFirebaseConnection = testFirebaseConnection;
+    </script>
+</body>
+</html>
