@@ -100,10 +100,23 @@
         }
         
         .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 25px !important;
+            margin-bottom: 50px !important;
+        }
+        
+        /* iPad Air and similar tablets - ALWAYS 2 columns for products */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
         }
         
         .product {
@@ -352,8 +365,8 @@
             }
             
             .products-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
             
             .product-img {

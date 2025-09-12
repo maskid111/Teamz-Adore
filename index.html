@@ -462,10 +462,10 @@
         
         /* Products Section */
         .products {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            margin-bottom: 50px;
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 25px !important;
+            margin-bottom: 50px !important;
         }
         
         .product {
@@ -588,7 +588,7 @@
         /* About Section */
         .about {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 0.42fr 1fr;
             gap: 40px;
             margin: 50px 0;
             align-items: center;
@@ -645,46 +645,6 @@
             color: var(--accent);
         }
         
-        /* Newsletter */
-        .newsletter {
-            background-color: var(--secondary);
-            padding: 50px 0;
-            text-align: center;
-            color: var(--light);
-            margin: 50px 0;
-        }
-        
-        .newsletter h2 {
-            margin-bottom: 20px;
-        }
-        
-        .newsletter p {
-            max-width: 600px;
-            margin: 0 auto 25px;
-        }
-        
-        .newsletter-form {
-            display: flex;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .newsletter-form input {
-            flex: 1;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 30px 0 0 30px;
-        }
-        
-        .newsletter-form button {
-            background-color: var(--accent);
-            color: var(--light);
-            border: none;
-            padding: 0 25px;
-            border-radius: 0 30px 30px 0;
-            font-weight: 600;
-            cursor: pointer;
-        }
         
         /* Footer */
         footer {
@@ -790,8 +750,12 @@
         }
         
         @media (max-width: 992px) {
-            .categories, .products, .testimonial-grid, .footer-content {
+            .categories, .testimonial-grid, .footer-content {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .products {
+                grid-template-columns: repeat(2, 1fr) !important;
             }
             
             .about {
@@ -806,7 +770,7 @@
         /* iPad Air and similar tablets - ALWAYS 2 columns for products */
         @media (max-width: 1024px) {
             .products {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr) !important;
             }
         }
         
@@ -923,8 +887,13 @@
                 font-size: 13px;
             }
             
-            .products, .testimonial-grid, .footer-content {
+            .testimonial-grid, .footer-content {
                 grid-template-columns: 1fr;
+            }
+            
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
             
             .category {
@@ -944,25 +913,7 @@
                 font-size: 28px;
             }
             
-            .newsletter-form {
-                flex-direction: column;
-                gap: 15px;
-            }
             
-            .newsletter-form input {
-                border-radius: 30px;
-            }
-            
-            .newsletter-form button {
-                border-radius: 30px;
-                padding: 12px 25px;
-            }
-            
-            /* Enhanced mobile product styling */
-            .products {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
             
             .product-img {
                 height: 200px;
@@ -1016,10 +967,10 @@
                 height: 180px;
             }
             
-            /* Single column layout for very small screens */
+            /* Keep 2 columns even on very small screens */
             .products {
-                grid-template-columns: 1fr;
-                gap: 20px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
             
             .product-details {
@@ -1224,8 +1175,8 @@
             </div>
             <div class="about-content">
                 <h2>About Teamz Adore Business Hub</h2>
-                <p>Founded in 2020, Teamz Adore Business Hub was born from a passion for making stylish fashion accessible to everyone. We believe that looking your best shouldn't break the bank.</p>
-                <p>Our team carefully curates each collection to bring you the latest trends while maintaining quality and affordability. We're committed to providing exceptional customer service and a seamless shopping experience.</p>
+                <p>Teamz Adore Business Hub is a brand established with the passion of making fashionable accessories accessible to everyone. We believe that looking your best should not break the bank. </p>
+                <p>Our team carefully curates each collection to bring you the latest trend while maintaining quality and affordability. We are committed to providing exceptional customer service and a seamless shopping experience for everyone.</p>
                 <a href="#" class="btn">Learn More</a>
             </div>
         </div>
@@ -1252,17 +1203,6 @@
         </div>
     </section>
 
-    <!-- Newsletter -->
-    <section class="newsletter">
-        <div class="container">
-            <h2>Subscribe to Our Newsletter</h2>
-            <p>Be the first to know about new arrivals, exclusive offers, and fashion tips.</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email address">
-                <button type="submit">Subscribe</button>
-            </form>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer>
@@ -1559,17 +1499,6 @@ Thank you! 😊`;
             window.open(whatsappURL, '_blank');
         }
         
-        // Simple form validation for newsletter
-        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input').value;
-            if (email && email.includes('@')) {
-                alert('Thanks for subscribing to our newsletter!');
-                this.querySelector('input').value = '';
-            } else {
-                alert('Please enter a valid email address.');
-            }
-        });
         
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
