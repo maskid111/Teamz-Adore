@@ -797,6 +797,7 @@
             text-align: center;
             padding: 50px;
             color: #666;
+            display: none;
         }
         
         .spinner {
@@ -953,9 +954,6 @@
                         <button class="btn" id="addProductBtn" onclick="openAddProductModal()">
                             <i class="fas fa-plus"></i> Add Product
                         </button>
-                        <!-- <button class="btn btn-warning" onclick="testFirebaseConnection()">
-                            <i class="fas fa-bug"></i> Test Firebase
-                        </button> -->
                     </div>
                 </div>
                 
@@ -1016,7 +1014,7 @@
                                 <option value="completed">Completed</option>
                             </select>
                         </div>
-                        <button class="btn btn-primary" onclick="searchOrders()">
+                        <button class="btn" onclick="searchOrders()">
                             <i class="fas fa-search"></i> Search
                         </button>
                         <button class="btn btn-secondary" onclick="clearSearch()">
@@ -1215,15 +1213,28 @@
         // Global variables
         let currentUser = null;
         let editingProductId = null;
+        
+        // Whitelisted emails
+        const WHITELISTED_EMAILS = [
+            'teamzadore@gmail.com',
+            'teamzadoredotcom@gmail.com'
+        ];
 
         // Authentication
         function checkAuth() {
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    currentUser = user;
-                    showAdminPanel();
-                    loadDashboard();
-                    loadProducts();
+                    // Check if user's email is whitelisted
+                    if (WHITELISTED_EMAILS.includes(user.email)) {
+                        currentUser = user;
+                        showAdminPanel();
+                        loadDashboard();
+                        loadProducts();
+                    } else {
+                        // User is not authorized
+                        alert('Access denied. Only authorized administrators can access this panel.');
+                        logout();
+                    }
                 } else {
                     showLoginForm();
                 }
@@ -1258,6 +1269,22 @@
                 // Sign in with Google
                 const result = await auth.signInWithPopup(provider);
                 currentUser = result.user;
+                
+                // Check if the user's email is whitelisted
+                if (!WHITELISTED_EMAILS.includes(currentUser.email)) {
+                    // User is not authorized, sign them out
+                    await auth.signOut();
+                    currentUser = null;
+                    
+                    // Show error
+                    errorMessage.textContent = 'Access denied. Only authorized administrators can access this panel.';
+                    errorMessage.style.display = 'block';
+                    
+                    // Reset form
+                    signInBtn.style.display = 'flex';
+                    loading.style.display = 'none';
+                    return;
+                }
                 
                 // Success handled by onAuthStateChanged
             } catch (error) {
@@ -1697,6 +1724,11 @@
             if (e.target === modal) {
                 closeModal();
             }
+            
+            const statusModal = document.getElementById('statusModal');
+            if (e.target === statusModal) {
+                closeStatusModal();
+            }
         });
 
         // Test Firebase connection
@@ -1751,9 +1783,6 @@
             }
         }
 
-        // Initialize app
-        checkAuth();
-        
         // ==================== ORDER MANAGEMENT FUNCTIONS ====================
         
         let currentOrderId = null;
@@ -1839,7 +1868,7 @@
                         <i class="fas fa-exclamation-triangle"></i>
                         <h3>Error Loading Orders</h3>
                         <p>${errorMessage}</p>
-                        <button class="btn btn-primary" onclick="loadOrders()">Retry</button>
+                        <button class="btn" onclick="loadOrders()">Retry</button>
                         <button class="btn btn-secondary" onclick="testFirebaseConnection()">Test Firebase</button>
                     </div>
                 `;
@@ -1856,7 +1885,7 @@
                         <i class="fas fa-search"></i>
                         <h3>No Orders Found</h3>
                         <p>No orders match your search criteria.</p>
-                        <button class="btn btn-primary" onclick="clearSearch()">Clear Search</button>
+                        <button class="btn" onclick="clearSearch()">Clear Search</button>
                     </div>
                 `;
                 return;
@@ -1989,8 +2018,9 @@
             });
             
             // Select current option
-            event.currentTarget.classList.add('selected');
-            event.currentTarget.querySelector('input').checked = true;
+            const targetOption = document.querySelector(`.status-option input[value="${status}"]`).closest('.status-option');
+            targetOption.classList.add('selected');
+            targetOption.querySelector('input').checked = true;
         }
         
         // Update order status
@@ -2094,14 +2124,6 @@
             document.getElementById('total-customers').textContent = uniqueCustomers;
         }
         
-        // Close status modal when clicking outside
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('statusModal');
-            if (e.target === modal) {
-                closeStatusModal();
-            }
-        });
-        
         // Load orders when orders section is accessed
         document.addEventListener('DOMContentLoaded', function() {
             // Add event listener for orders navigation
@@ -2115,6 +2137,9 @@
                     }, 100);
                 });
             }
+            
+            // Initialize app
+            checkAuth();
         });
     </script>
 </body>
