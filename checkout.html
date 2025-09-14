@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Teamz Adore Business Hub</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #f8e1e7;
+            --secondary: #d8a1b6;
+            --accent: #e83e8c;
+            --dark: #3a3a3a;
+            --light: #ffffff;
+        }
+        
+        body {
+            background-color: #fefefe;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--dark);
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover .logo-img {
+            transform: scale(1.1);
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .logo-text span {
+            color: var(--dark);
+        }
+        
+        .main-nav {
+            display: flex;
+            gap: 30px;
+            position: relative;
+            align-items: flex-start;
+        }
+        
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+        
+        .nav-section:last-child {
+            display: none;
+        }
+        
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid var(--accent);
+            white-space: nowrap;
+        }
+        
+        .nav-menu, .nav-categories {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-menu li, .nav-categories li {
+            margin: 0;
+            flex-shrink: 0;
+        }
+        
+        .nav-menu li a, .nav-categories li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 6px 10px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 14px;
+            white-space: nowrap;
+            display: block;
+        }
+        
+        .nav-menu li a:hover, .nav-categories li a:hover {
+            color: var(--accent);
+            background-color: rgba(232, 62, 140, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .nav-menu li a.active, .nav-categories li a.active {
+            color: var(--accent);
+            background-color: rgba(232, 62, 140, 0.1);
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        .breadcrumb {
+            background-color: var(--primary);
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+        
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .breadcrumb a {
+            color: var(--dark);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--accent);
+        }
+        
+        .breadcrumb i {
+            color: var(--accent);
+        }
+        
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .checkout-form {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .checkout-form h2 {
+            color: var(--accent);
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .order-summary {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .order-summary h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--accent);
+        }
+        
+        .item-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-info h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .item-info p {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--accent);
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        .checkout-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--light);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .empty-cart i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart h2 {
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--light);
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #ce2c78;
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .empty-cart i {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart h2 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart .btn {
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .empty-cart .btn:hover {
+            background: #d63384;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .logo {
+                justify-content: center;
+                order: 1;
+            }
+            
+            .main-nav {
+                width: 100%;
+                order: 3;
+                margin-top: 0;
+                flex-direction: column;
+                gap: 15px;
+                display: none;
+            }
+            
+            .main-nav.active {
+                display: flex;
+            }
+            
+            .nav-section {
+                width: 100%;
+            }
+            
+            .nav-section:last-child {
+                display: flex;
+            }
+            
+            .nav-section-title {
+                font-size: 12px;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-menu, .nav-categories {
+                flex-direction: column;
+                background-color: var(--light);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                padding: 15px;
+                gap: 8px;
+            }
+            
+            .nav-menu li, .nav-categories li {
+                margin: 0;
+                width: 100%;
+            }
+            
+            .nav-menu li a, .nav-categories li a {
+                display: block;
+                padding: 12px 15px;
+                border-radius: 8px;
+                text-align: center;
+                font-size: 14px;
+            }
+            
+            .checkout-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-summary {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="logo.jpg" alt="Teamz Adore Logo" class="logo-img">
+                    <span class="logo-text">Teamz <span>Adore</span></span>
+                </a>
+                <nav class="main-nav">
+                    <div class="nav-section">
+                        <h4 class="nav-section-title">MENU</h4>
+                        <ul class="nav-menu">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-section">
+                        <h4 class="nav-section-title">CATEGORIES</h4>
+                        <ul class="nav-categories">
+                            <li><a href="female-shoes.html">Female Shoes</a></li>
+                            <li><a href="male-shoes.html">Male Shoes</a></li>
+                            <li><a href="bags.html">Bags</a></li>
+                            <li><a href="accessories.html">Accessories</a></li>
+                            <li><a href="wears.html">Wears</a></li>
+                            <li><a href="skincare.html">Skincare</a></li>
+                            <li><a href="hair.html">Hair</a></li>
+                            <li><a href="perfume.html">Perfume</a></li>
+                            <li><a href="fabric.html">Fabric</a></li>
+                            <li><a href="others.html">Others</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="icons">
+                    <button class="mobile-menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="shop.html">Shop</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Checkout</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="checkout-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading checkout...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart System -->
+    <script src="cart.js"></script>
+
+    <script>
+        // Initialize Firebase (you need to add your config here)
+        // This is a placeholder - you need to add your actual Firebase config
+        const firebaseConfig = {
+  apiKey: "AIzaSyDmDGQC3hsDoHvepmlHkvimX8DUg0X-hYY",
+  authDomain: "teamz-adore-d76ad.firebaseapp.com",
+  projectId: "teamz-adore-d76ad",
+  storageBucket: "teamz-adore-d76ad.firebasestorage.app",
+  messagingSenderId: "99067685820",
+  appId: "1:99067685820:web:62cda395f0a1ebc99fd9b9"
+};
+        
+        // Initialize Firebase
+        if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const nav = document.querySelector('.main-nav');
+            
+            if (mobileMenuToggle && nav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    nav.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    if (nav.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Initialize cart if not already done
+            if (typeof window.cart === 'undefined') {
+                // Create a basic cart object if cart.js fails to load
+                window.cart = {
+                    items: JSON.parse(localStorage.getItem('cartItems')) || [],
+                    getTotalPrice: function() {
+                        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+                    },
+                    getTotalItems: function() {
+                        return this.items.reduce((total, item) => total + item.quantity, 0);
+                    },
+                    getProductImage: function(image) {
+                        return image || 'placeholder.jpg';
+                    }
+                };
+            }
+            
+            // Load checkout page
+            loadCheckoutPage();
+        });
+
+        function loadCheckoutPage() {
+            const checkoutContent = document.getElementById('checkout-content');
+            
+            console.log('Loading checkout page...');
+            console.log('Window cart:', window.cart);
+            
+            // Check if cart is available
+            if (!window.cart) {
+                console.error('Cart not initialized');
+                checkoutContent.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Cart system not loaded</h2>
+                        <p>The cart system failed to load. Please refresh the page or go back to the shop.</p>
+                        <a href="shop.html" class="btn">Go to Shop</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (!window.cart.items || window.cart.items.length === 0) {
+                console.log('Cart is empty');
+                checkoutContent.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h2>Your cart is empty</h2>
+                        <p>Add some items to your cart before checking out.</p>
+                        <a href="shop.html" class="btn">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            console.log('Rendering checkout page with', window.cart.items.length, 'items');
+            renderCheckoutPage();
+        }
+
+        function renderCheckoutPage() {
+            const checkoutContent = document.getElementById('checkout-content');
+            const cart = window.cart;
+            
+            checkoutContent.innerHTML = `
+                <div class="checkout-container">
+                    <div class="checkout-form">
+                        <h2>Checkout Information</h2>
+                        <form id="checkout-form">
+                            <div class="form-group">
+                                <label for="fullName">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="state">State *</label>
+                                <select id="state" name="state" required>
+                                    <option value="">Select State</option>
+                                    <option value="Abia">Abia</option>
+                                    <option value="Adamawa">Adamawa</option>
+                                    <option value="Akwa Ibom">Akwa Ibom</option>
+                                    <option value="Anambra">Anambra</option>
+                                    <option value="Bauchi">Bauchi</option>
+                                    <option value="Bayelsa">Bayelsa</option>
+                                    <option value="Benue">Benue</option>
+                                    <option value="Borno">Borno</option>
+                                    <option value="Cross River">Cross River</option>
+                                    <option value="Delta">Delta</option>
+                                    <option value="Ebonyi">Ebonyi</option>
+                                    <option value="Edo">Edo</option>
+                                    <option value="Ekiti">Ekiti</option>
+                                    <option value="Enugu">Enugu</option>
+                                    <option value="FCT">FCT</option>
+                                    <option value="Gombe">Gombe</option>
+                                    <option value="Imo">Imo</option>
+                                    <option value="Jigawa">Jigawa</option>
+                                    <option value="Kaduna">Kaduna</option>
+                                    <option value="Kano">Kano</option>
+                                    <option value="Katsina">Katsina</option>
+                                    <option value="Kebbi">Kebbi</option>
+                                    <option value="Kogi">Kogi</option>
+                                    <option value="Kwara">Kwara</option>
+                                    <option value="Lagos">Lagos</option>
+                                    <option value="Nasarawa">Nasarawa</option>
+                                    <option value="Niger">Niger</option>
+                                    <option value="Ogun">Ogun</option>
+                                    <option value="Ondo">Ondo</option>
+                                    <option value="Osun">Osun</option>
+                                    <option value="Oyo">Oyo</option>
+                                    <option value="Plateau">Plateau</option>
+                                    <option value="Rivers">Rivers</option>
+                                    <option value="Sokoto">Sokoto</option>
+                                    <option value="Taraba">Taraba</option>
+                                    <option value="Yobe">Yobe</option>
+                                    <option value="Zamfara">Zamfara</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="order-items">
+                            ${renderOrderItems()}
+                        </div>
+                        <div class="total-section">
+                            <div class="summary-item">
+                                <span>Subtotal:</span>
+                                <span>₦${cart.getTotalPrice().toLocaleString()}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Delivery:</span>
+                                <span>To be discussed</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Total Items:</span>
+                                <span>${cart.getTotalItems()}</span>
+                            </div>
+                        </div>
+                        <button class="checkout-btn" onclick="proceedToWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                            Complete Order via WhatsApp
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderOrderItems() {
+            const cart = window.cart;
+            return cart.items.map(item => `
+                <div class="summary-item">
+                    <div class="item-details">
+                        <div class="item-image">
+                            <img src="${cart.getProductImage(item.image)}" alt="${item.name}">
+                        </div>
+                        <div class="item-info">
+                            <h4>${item.name}</h4>
+                            <p>Qty: ${item.quantity}</p>
+                        </div>
+                    </div>
+                    <div class="item-price">₦${(item.price * item.quantity).toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        async function proceedToWhatsApp() {
+            const form = document.getElementById('checkout-form');
+            const formData = new FormData(form);
+            
+            // Validate required fields
+            const requiredFields = ['fullName', 'phone', 'state'];
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    input.style.borderColor = '#ff4444';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#e0e0e0';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Generate order ID and details URL
+            const orderId = generateOrderId();
+            const orderDetailsUrl = `${window.location.origin}/order-details.html?orderId=${orderId}&name=${encodeURIComponent(formData.get('fullName'))}&phone=${encodeURIComponent(formData.get('phone'))}&state=${encodeURIComponent(formData.get('state'))}`;
+            
+            // Generate WhatsApp message
+            const cart = window.cart;
+            let message = `Hello Teamz Adore Business Hub! 👋\n\n`;
+            message += `I would like to place an order with the following details:\n\n`;
+            message += `📋 Order ID: ${orderId}\n\n`;
+            
+            // Customer information
+            message += `👤 CUSTOMER INFORMATION:\n`;
+            message += `Name: ${formData.get('fullName')}\n`;
+            message += `Phone: ${formData.get('phone')}\n`;
+            message += `State: ${formData.get('state')}\n`;
+            
+            message += `\n🛍️ ORDER DETAILS:\n`;
+            cart.items.forEach((item, index) => {
+                message += `${index + 1}. ${item.name}\n`;
+                message += `   Quantity: ${item.quantity}\n`;
+                message += `   Price: ₦${item.price.toLocaleString()} each\n`;
+                message += `   Subtotal: ₦${(item.price * item.quantity).toLocaleString()}\n\n`;
+            });
+            
+            message += `📊 ORDER SUMMARY:\n`;
+            message += `Total Items: ${cart.getTotalItems()}\n`;
+            message += `Total Amount: ₦${cart.getTotalPrice().toLocaleString()}\n\n`;
+            message += `📄 For detailed order information, please visit:\n${orderDetailsUrl}\n\n`;
+            message += `Please provide me with:\n`;
+            message += `- Available sizes for each item\n`;
+            message += `- Delivery information and cost\n`;
+            message += `- Payment options\n`;
+            message += `- Estimated delivery time\n\n`;
+            message += `Thank you! 😊`;
+            
+            // Save order to Firebase
+            await saveOrderToFirebase(orderId, formData, cart);
+            
+            // Open WhatsApp
+            const whatsappURL = `https://wa.me/2348139106521?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Generate order ID
+        function generateOrderId() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substr(2, 5);
+            return `TA${timestamp.toString().slice(-6)}${random.toUpperCase()}`;
+        }
+        
+        // Save order to Firebase
+        async function saveOrderToFirebase(orderId, formData, cart) {
+            try {
+                if (!firebase || !firebase.firestore) {
+                    console.error('Firebase not available');
+                    return;
+                }
+                
+                const db = firebase.firestore();
+                
+                const orderData = {
+                    orderId: orderId,
+                    customerName: formData.get('fullName'),
+                    customerPhone: formData.get('phone'),
+                    customerState: formData.get('state'),
+                    items: cart.items,
+                    totalAmount: cart.getTotalPrice(),
+                    totalItems: cart.getTotalItems(),
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                // Save to Firebase
+                await db.collection('orders').add(orderData);
+                console.log('Order saved to Firebase:', orderId);
+                
+            } catch (error) {
+                console.error('Error saving order to Firebase:', error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Teamz Adore Business Hub</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #f8e1e7;
+            --secondary: #d8a1b6;
+            --accent: #e83e8c;
+            --dark: #3a3a3a;
+            --light: #ffffff;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .order-header {
+            background: linear-gradient(135deg, var(--accent), #ff6b9d);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(232, 62, 140, 0.3);
+        }
+        
+        .order-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .order-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .order-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background-color: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .info-value {
+            color: #666;
+            text-align: right;
+        }
+        
+        .order-items {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .order-items h3 {
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .item-category {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+        
+        .item-specs {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .item-price {
+            text-align: right;
+            min-width: 120px;
+        }
+        
+        .item-unit-price {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .item-total-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .order-summary {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent);
+            border-top: 2px solid var(--accent);
+            margin-top: 10px;
+            padding-top: 20px;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+        }
+        
+        .summary-value {
+            text-align: right;
+        }
+        
+        .order-notes {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .order-notes h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .notes-content {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            font-style: italic;
+            color: #666;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ce2c78;
+            transform: translateY(-2px);
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: var(--dark);
+            border: 2px solid #e0e0e0;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: var(--accent);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #ffe6e6;
+            border-radius: 15px;
+            border: 2px solid #ffcccc;
+        }
+        
+        .error-message i {
+            font-size: 60px;
+            color: #ff4444;
+            margin-bottom: 20px;
+        }
+        
+        .error-message h2 {
+            color: #cc0000;
+            margin-bottom: 15px;
+        }
+        
+        .error-message p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .order-id {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-processing {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-shipped {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+        
+        .status-delivered {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .order-header h1 {
+                font-size: 24px;
+            }
+            
+            .order-header p {
+                font-size: 16px;
+            }
+            
+            .order-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .item-image {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .item-details {
+                text-align: center;
+            }
+            
+            .item-specs {
+                justify-content: center;
+            }
+            
+            .item-price {
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .container {
+                max-width: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .order-header {
+                background: linear-gradient(135deg, #e83e8c, #ff6b9d) !important;
+                -webkit-print-color-adjust: exact;
+                color: white !important;
+            }
+            
+            .order-header h1 {
+                color: white !important;
+            }
+            
+            .order-header p {
+                color: white !important;
+            }
+            
+            .order-id {
+                background-color: rgba(255, 255, 255, 0.2) !important;
+                color: white !important;
+            }
+            
+            .info-card, .order-items, .order-summary, .order-notes {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                page-break-inside: avoid;
+            }
+            
+            .action-buttons {
+                display: none !important;
+            }
+            
+            .status-badge {
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .status-completed {
+                background-color: #d4edda !important;
+                color: #155724 !important;
+                border: 2px solid #28a745 !important;
+            }
+            
+            .item {
+                page-break-inside: avoid;
+            }
+            
+            .summary-row:last-child {
+                border-top: 2px solid #e83e8c !important;
+                font-weight: bold !important;
+                color: #e83e8c !important;
+            }
+            
+            @page {
+                margin: 0.5in;
+                size: A4;
+            }
+        }
+        
+        /* Items List Styles */
+        .items-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .items-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+            background: var(--primary);
+            font-weight: bold;
+            color: var(--dark);
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .items-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .item-row:last-child {
+            border-bottom: none;
+        }
+        
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--secondary);
+        }
+        
+        .item-details h4 {
+            margin: 0 0 5px 0;
+            color: var(--dark);
+            font-size: 16px;
+        }
+        
+        .item-details .item-price {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .item-quantity,
+        .item-price,
+        .item-total {
+            text-align: center;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .item-total {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .no-items {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .no-items i {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .order-total {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 2px solid var(--secondary);
+        }
+        
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .total-line:last-child {
+            margin-bottom: 0;
+        }
+        
+        .total-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .total-value {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .items-header,
+            .item-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .items-header span {
+                display: none;
+            }
+            
+            .item-row {
+                border: 1px solid #eee;
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+            
+            .item-info {
+                grid-column: 1;
+                margin-bottom: 10px;
+            }
+            
+            .item-quantity::before {
+                content: "Quantity: ";
+                font-weight: bold;
+            }
+            
+            .item-price::before {
+                content: "Price: ";
+                font-weight: bold;
+            }
+            
+            .item-total::before {
+                content: "Total: ";
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="order-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading order details...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart System -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="cart.js"></script>
+
+    <script>
+        // Get URL parameters
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Get image URL with fallback
+        function getImageUrl(imagePath) {
+            if (imagePath && imagePath.trim() !== '') {
+                // If it's already a full URL, return as is
+                if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                    return imagePath;
+                }
+                // If it's a relative path, return as is
+                return imagePath;
+            } else {
+                // Return placeholder image
+                return 'https://via.placeholder.com/100x100/ff69b4/ffffff?text=No+Image';
+            }
+        }
+
+        // Format date
+        function formatDate(date) {
+            return new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+
+        // Generate order ID
+        function generateOrderId() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substr(2, 5);
+            return `TA${timestamp.toString().slice(-6)}${random.toUpperCase()}`;
+        }
+
+        // Get product image with fallback
+        function getProductImage(imageUrl) {
+            if (!imageUrl) {
+                return 'https://via.placeholder.com/100x100/ff69b4/ffffff?text=No+Image';
+            }
+            
+            if (imageUrl.startsWith('data:image/')) {
+                return imageUrl;
+            } else if (imageUrl.startsWith('https://via.placeholder.com/')) {
+                return imageUrl;
+            } else {
+                return 'https://via.placeholder.com/100x100/ff69b4/ffffff?text=No+Image';
+            }
+        }
+
+        // Load order details
+        async function loadOrderDetails() {
+            const orderContent = document.getElementById('order-content');
+            
+            try {
+                // Check if we have order ID in URL parameters (direct access from WhatsApp)
+                const orderIdFromUrl = getUrlParameter('orderId');
+                
+                if (orderIdFromUrl) {
+                    // Direct access via URL - render order details from URL parameters
+                    await renderOrderDetailsFromUrl();
+                } else {
+                    // Access via cart - wait for cart to be initialized
+                    setTimeout(() => {
+                        if (!window.cart || window.cart.items.length === 0) {
+                            orderContent.innerHTML = `
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <h2>No Order Found</h2>
+                                    <p>No items found in your cart. Please add some items to your cart first.</p>
+                                    <a href="shop.html" class="btn btn-primary">
+                                        <i class="fas fa-shopping-bag"></i>
+                                        Start Shopping
+                                    </a>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        renderOrderDetails();
+                    }, 100);
+                }
+            } catch (error) {
+                console.error('Error in loadOrderDetails:', error);
+                orderContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Error Loading Order</h2>
+                        <p>There was an error loading the order details: ${error.message}</p>
+                        <button class="btn btn-primary" onclick="location.reload()">
+                            <i class="fas fa-refresh"></i>
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Load cart items from localStorage (fallback)
+        function loadCartFromStorage() {
+            try {
+                const cartData = localStorage.getItem('teamzAdoreCart');
+                if (cartData) {
+                    const parsed = JSON.parse(cartData);
+                    return parsed.items || [];
+                }
+            } catch (error) {
+                console.error('Error loading cart from storage:', error);
+            }
+            return [];
+        }
+
+        // Load order data from Firebase
+        async function loadOrderFromFirebase(orderId) {
+            try {
+                if (!firebase || !firebase.firestore) {
+                    console.error('Firebase not available');
+                    return null;
+                }
+
+                const db = firebase.firestore();
+                
+                // Search for order by orderId
+                const ordersSnapshot = await db.collection('orders')
+                    .where('orderId', '==', orderId)
+                    .limit(1)
+                    .get();
+
+                if (!ordersSnapshot.empty) {
+                    const orderDoc = ordersSnapshot.docs[0];
+                    const orderData = orderDoc.data();
+                    return {
+                        id: orderDoc.id,
+                        ...orderData
+                    };
+                }
+
+                console.log('No order found with ID:', orderId);
+                return null;
+            } catch (error) {
+                console.error('Error loading order from Firebase:', error);
+                return null;
+            }
+        }
+
+        // Render order details when accessed directly via URL (from WhatsApp)
+        async function renderOrderDetailsFromUrl() {
+            const orderContent = document.getElementById('order-content');
+            
+            // Show loading state
+            orderContent.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading order details...</p>
+                </div>
+            `;
+            
+            // Add timeout to prevent infinite loading
+            const loadingTimeout = setTimeout(() => {
+                orderContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Loading Timeout</h2>
+                        <p>The order details are taking too long to load. This might be due to a network issue.</p>
+                        <button class="btn btn-primary" onclick="location.reload()">
+                            <i class="fas fa-refresh"></i>
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }, 10000); // 10 second timeout
+            
+            try {
+                // Get order ID from URL parameters
+                const orderId = getUrlParameter('orderId') || 'Unknown';
+                
+                // Try to load order from Firebase first
+                let orderData = null;
+                if (orderId !== 'Unknown') {
+                    console.log('Loading order from Firebase for ID:', orderId);
+                    orderData = await loadOrderFromFirebase(orderId);
+                    console.log('Order data loaded:', orderData);
+                }
+                
+                // Clear timeout since we got here
+                clearTimeout(loadingTimeout);
+                
+                // Get customer info from URL parameters or Firebase data
+            const customerName = orderData?.customerName || getUrlParameter('name') || 'Customer';
+            const customerPhone = orderData?.customerPhone || getUrlParameter('phone') || 'Not provided';
+            const customerState = orderData?.customerState || getUrlParameter('state') || 'Not provided';
+            const orderStatus = orderData?.status || getUrlParameter('status') || 'pending';
+            const orderDate = orderData?.createdAt ? orderData.createdAt.toDate() : new Date();
+            
+            // Get cart items from Firebase data or fallback to localStorage
+            let cartItems = [];
+            if (orderData && orderData.items) {
+                cartItems = orderData.items;
+            } else {
+                cartItems = loadCartFromStorage();
+            }
+            
+            // If no items found, show error message
+            if (cartItems.length === 0) {
+                orderContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Order Not Found</h2>
+                        <p>We couldn't find the order details for Order ID: ${orderId}</p>
+                        <p>This might be because:</p>
+                        <ul style="text-align: left; max-width: 400px; margin: 20px auto;">
+                            <li>The order ID is incorrect</li>
+                            <li>The order hasn't been saved to our database yet</li>
+                            <li>There was an issue with the order processing</li>
+                        </ul>
+                        <div style="margin-top: 20px;">
+                            <a href="https://wa.me/2348139106521" class="btn btn-success" target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                                Contact Us for Help
+                            </a>
+                            <a href="shop.html" class="btn btn-primary">
+                                <i class="fas fa-shopping-bag"></i>
+                                Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            orderContent.innerHTML = `
+                <div class="order-header">
+                    <h1><i class="fas fa-receipt"></i> Order Details</h1>
+                    <p>Thank you for your order with Teamz Adore Business Hub</p>
+                    <div class="order-id">Order ID: ${orderId}</div>
+                </div>
+                
+                <div class="order-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-user"></i> Customer Information</h3>
+                        <div class="info-item">
+                            <span class="label">Name:</span>
+                            <span class="value">${customerName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Phone:</span>
+                            <span class="value">${customerPhone}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">State:</span>
+                            <span class="value">${customerState}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-info-circle"></i> Order Information</h3>
+                        <div class="info-item">
+                            <span class="label">Order ID:</span>
+                            <span class="value">${orderId}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Order Date:</span>
+                            <span class="value">${formatDate(orderDate)}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Status:</span>
+                            <span class="value">
+                                <span class="status-badge status-${orderStatus}">${orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1)}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <h3><i class="fas fa-shopping-cart"></i> Order Summary</h3>
+                    <div class="items-list">
+                        <div class="items-header">
+                            <span>Item</span>
+                            <span>Quantity</span>
+                            <span>Price</span>
+                            <span>Total</span>
+                        </div>
+                        <div class="items-content" id="order-items">
+                            ${cartItems.length > 0 ? cartItems.map(item => `
+                                <div class="item-row">
+                                    <div class="item-info">
+                                        <img src="${getImageUrl(item.image)}" alt="${item.name}" class="item-image">
+                                        <div class="item-details">
+                                            <h4>${item.name}</h4>
+                                            <p class="item-price">₦${item.price.toLocaleString()} each</p>
+                                        </div>
+                                    </div>
+                                    <div class="item-quantity">${item.quantity}</div>
+                                    <div class="item-price">₦${item.price.toLocaleString()}</div>
+                                    <div class="item-total">₦${(item.price * item.quantity).toLocaleString()}</div>
+                                </div>
+                            `).join('') : `
+                                <div class="no-items">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <p>No items found in cart</p>
+                                </div>
+                            `}
+                        </div>
+                        <div class="order-total">
+                            <div class="total-line">
+                                <span class="total-label">Subtotal:</span>
+                                <span class="total-value" id="subtotal">₦${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString()}</span>
+                            </div>
+                            <div class="total-line">
+                                <span class="total-label">Total Items:</span>
+                                <span class="total-value" id="total-items">${cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-actions">
+                    <button class="btn btn-primary" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        Print Receipt
+                    </button>
+                    <a href="https://wa.me/2348139106521" class="btn btn-success" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        Contact Us
+                    </a>
+                    <a href="shop.html" class="btn btn-secondary">
+                        <i class="fas fa-shopping-bag"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            `;
+            } catch (error) {
+                clearTimeout(loadingTimeout);
+                console.error('Error in renderOrderDetailsFromUrl:', error);
+                orderContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Error Loading Order Details</h2>
+                        <p>There was an error loading the order details: ${error.message}</p>
+                        <p>Please try again or contact support if the problem persists.</p>
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" onclick="location.reload()">
+                                <i class="fas fa-refresh"></i>
+                                Try Again
+                            </button>
+                            <a href="https://wa.me/2348139106521" class="btn btn-success" target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderOrderDetails() {
+            const orderContent = document.getElementById('order-content');
+            const cart = window.cart;
+            
+            // Get order ID from URL parameters first, then generate if not available
+            const orderId = getUrlParameter('orderId') || generateOrderId();
+            const orderDate = new Date();
+            
+            // Get customer info from URL parameters or use defaults
+            const customerName = getUrlParameter('name') || 'Customer';
+            const customerPhone = getUrlParameter('phone') || 'Not provided';
+            const customerState = getUrlParameter('state') || 'Not provided';
+            const orderStatus = getUrlParameter('status') || 'pending';
+            
+            orderContent.innerHTML = `
+                <div class="order-header">
+                    <h1><i class="fas fa-receipt"></i> Order Details</h1>
+                    <p>Thank you for your order with Teamz Adore Business Hub</p>
+                    <div class="order-id">Order ID: ${orderId}</div>
+                </div>
+                
+                <div class="order-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-user"></i> Customer Information</h3>
+                        <div class="info-item">
+                            <span class="info-label">Name:</span>
+                            <span class="info-value">${customerName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Phone:</span>
+                            <span class="info-value">${customerPhone}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">State:</span>
+                            <span class="info-value">${customerState}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-info-circle"></i> Order Information</h3>
+                        <div class="info-item">
+                            <span class="info-label">Order ID:</span>
+                            <span class="info-value">${orderId}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Order Date:</span>
+                            <span class="info-value">${formatDate(orderDate)}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value">
+                                <span class="status-badge status-${orderStatus}">${orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1)}</span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total Items:</span>
+                            <span class="info-value">${cart.getTotalItems()}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Payment Method:</span>
+                            <span class="info-value">To be discussed</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Delivery:</span>
+                            <span class="info-value">To be arranged</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-items">
+                    <h3><i class="fas fa-shopping-bag"></i> Order Items</h3>
+                    ${cart.items.map(item => `
+                        <div class="item">
+                            <div class="item-image">
+                                <img src="${getProductImage(item.image)}" alt="${item.name}">
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">${item.name}</div>
+                                <div class="item-category">${item.category}</div>
+                                <div class="item-specs">
+                                    <span><strong>Quantity:</strong> ${item.quantity}</span>
+                                    <span><strong>Unit Price:</strong> ₦${item.price.toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="item-price">
+                                <div class="item-unit-price">₦${item.price.toLocaleString()} each</div>
+                                <div class="item-total-price">₦${(item.price * item.quantity).toLocaleString()}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="order-summary">
+                    <h3><i class="fas fa-shopping-cart"></i> Order Summary</h3>
+                    <div class="items-list">
+                        <div class="items-header">
+                            <span>Item</span>
+                            <span>Quantity</span>
+                            <span>Price</span>
+                            <span>Total</span>
+                        </div>
+                        <div class="items-content">
+                            ${cart.items.map(item => `
+                                <div class="item-row">
+                                    <div class="item-info">
+                                        <img src="${getImageUrl(item.image)}" alt="${item.name}" class="item-image">
+                                        <div class="item-details">
+                                            <h4>${item.name}</h4>
+                                            <p class="item-price">₦${item.price.toLocaleString()} each</p>
+                                        </div>
+                                    </div>
+                                    <div class="item-quantity">${item.quantity}</div>
+                                    <div class="item-price">₦${item.price.toLocaleString()}</div>
+                                    <div class="item-total">₦${(item.price * item.quantity).toLocaleString()}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="order-total">
+                            <div class="total-line">
+                                <span class="total-label">Subtotal:</span>
+                                <span class="total-value">₦${cart.getTotalPrice().toLocaleString()}</span>
+                            </div>
+                            <div class="total-line">
+                                <span class="total-label">Total Items:</span>
+                                <span class="total-value">${cart.getTotalItems()}</span>
+                            </div>
+                            <div class="total-line">
+                                <span class="total-label">Delivery Fee:</span>
+                                <span class="total-value">To be discussed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${orderNotes ? `
+                    <div class="order-notes">
+                        <h3><i class="fas fa-sticky-note"></i> Order Notes</h3>
+                        <div class="notes-content">${orderNotes}</div>
+                    </div>
+                ` : ''}
+                
+                <div class="action-buttons">
+                    <a href="https://wa.me/2348139106521?text=${encodeURIComponent(generateWhatsAppMessage())}" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        Contact via WhatsApp
+                    </a>
+                    <a href="shop.html" class="btn btn-secondary">
+                        <i class="fas fa-shopping-bag"></i>
+                        Continue Shopping
+                    </a>
+                    <button onclick="window.print()" class="btn btn-primary">
+                        <i class="fas fa-print"></i>
+                        Print Order
+                    </button>
+                </div>
+            `;
+        }
+
+        function generateWhatsAppMessage() {
+            const cart = window.cart;
+            const orderId = generateOrderId();
+            
+            let message = `Hello Teamz Adore Business Hub! 👋\n\n`;
+            message += `I have placed an order with the following details:\n\n`;
+            message += `📋 ORDER ID: ${orderId}\n`;
+            message += `📅 Date: ${formatDate(new Date())}\n\n`;
+            
+            message += `🛍️ ORDER ITEMS:\n`;
+            cart.items.forEach((item, index) => {
+                message += `${index + 1}. ${item.name}\n`;
+                message += `   Category: ${item.category}\n`;
+                message += `   Quantity: ${item.quantity}\n`;
+                message += `   Unit Price: ₦${item.price.toLocaleString()}\n`;
+                message += `   Subtotal: ₦${(item.price * item.quantity).toLocaleString()}\n\n`;
+            });
+            
+            message += `💰 ORDER SUMMARY:\n`;
+            message += `Total Items: ${cart.getTotalItems()}\n`;
+            message += `Subtotal: ₦${cart.getTotalPrice().toLocaleString()}\n\n`;
+            
+            message += `Please provide:\n`;
+            message += `- Available sizes for each item\n`;
+            message += `- Delivery information and cost\n`;
+            message += `- Payment options\n`;
+            message += `- Estimated delivery time\n\n`;
+            message += `Thank you! 😊`;
+            
+            return message;
+        }
+
+        // Load order details when page loads
+        // Initialize Firebase
+        function initializeFirebase() {
+            try {
+                if (typeof firebase !== 'undefined' && firebaseConfig) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log('Firebase initialized successfully');
+                    return true;
+                } else {
+                    console.error('Firebase or config not available');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                return false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Initialize Firebase first
+                const firebaseReady = initializeFirebase();
+                
+                if (!firebaseReady) {
+                    console.warn('Firebase not available, using fallback methods');
+                }
+                
+                await loadOrderDetails();
+                
+                // Check if this is a print request
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('print') === 'true') {
+                    setTimeout(() => {
+                        window.print();
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Error in DOMContentLoaded:', error);
+                const orderContent = document.getElementById('order-content');
+                orderContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Page Load Error</h2>
+                        <p>There was an error loading the page: ${error.message}</p>
+                        <button class="btn btn-primary" onclick="location.reload()">
+                            <i class="fas fa-refresh"></i>
+                            Reload Page
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

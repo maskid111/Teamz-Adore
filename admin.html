@@ -353,6 +353,301 @@
             color: var(--dark);
         }
         
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        /* Orders Section Styles */
+        .search-section {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto auto;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .orders-container {
+            background-color: var(--light);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .order-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+        
+        .order-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .order-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .customer-info h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .customer-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 2px 0;
+        }
+        
+        .order-summary h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .order-summary p {
+            color: #666;
+            font-size: 14px;
+            margin: 2px 0;
+        }
+        
+        .status-section {
+            text-align: center;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-processing {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-shipped {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+        
+        .status-delivered {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid var(--success);
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .no-orders {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .no-orders i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .no-orders h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        /* Status Update Modal */
+        .status-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .status-modal-content {
+            background-color: var(--light);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-modal-header h3 {
+            color: var(--accent);
+            margin: 0;
+        }
+        
+        .status-close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .status-close:hover {
+            color: var(--dark);
+        }
+        
+        .status-options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .status-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .status-option:hover {
+            border-color: var(--accent);
+            background-color: var(--primary);
+        }
+        
+        .status-option.selected {
+            border-color: var(--accent);
+            background-color: var(--primary);
+        }
+        
+        .status-option input[type="radio"] {
+            margin: 0;
+        }
+        
+        .status-modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-details {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .order-actions {
+                justify-content: center;
+            }
+            
+            .status-modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
         .btn-warning:hover {
             background-color: #e0a800;
         }
@@ -692,10 +987,52 @@
             <section id="orders" class="content-section">
                 <div class="section-header">
                     <h2>Orders Management</h2>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" onclick="loadOrders()">
+                            <i class="fas fa-sync"></i> Refresh Orders
+                        </button>
+                        <button class="btn btn-warning" onclick="exportOrders()">
+                            <i class="fas fa-download"></i> Export Orders
+                        </button>
+                    </div>
                 </div>
-                <div class="loading">
-                    <div class="spinner"></div>
-                    Orders feature coming soon...
+                
+                <!-- Search and Filter -->
+                <div class="search-section">
+                    <div class="search-form">
+                        <div class="form-group">
+                            <label for="orderSearch">Search Orders</label>
+                            <input type="text" id="orderSearch" placeholder="Search by Order ID, Customer Name, or Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="statusFilter">Filter by Status</label>
+                            <select id="statusFilter">
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="searchOrders()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearSearch()">
+                            <i class="fas fa-times"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Orders List -->
+                <div class="orders-container">
+                    <div id="orders-content">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading orders...</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -773,6 +1110,52 @@
                     <button type="submit" class="btn btn-success" id="submitBtn">Add Product</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Status Update Modal -->
+    <div id="statusModal" class="status-modal">
+        <div class="status-modal-content">
+            <div class="status-modal-header">
+                <h3>Update Order Status</h3>
+                <span class="status-close" onclick="closeStatusModal()">&times;</span>
+            </div>
+            <div class="status-options">
+                <label class="status-option" onclick="selectStatus('pending')">
+                    <input type="radio" name="status" value="pending">
+                    <span class="status-badge status-pending">Pending</span>
+                    <span>Order received, awaiting confirmation</span>
+                </label>
+                <label class="status-option" onclick="selectStatus('confirmed')">
+                    <input type="radio" name="status" value="confirmed">
+                    <span class="status-badge status-confirmed">Confirmed</span>
+                    <span>Order confirmed, preparing items</span>
+                </label>
+                <label class="status-option" onclick="selectStatus('processing')">
+                    <input type="radio" name="status" value="processing">
+                    <span class="status-badge status-processing">Processing</span>
+                    <span>Order being processed</span>
+                </label>
+                <label class="status-option" onclick="selectStatus('shipped')">
+                    <input type="radio" name="status" value="shipped">
+                    <span class="status-badge status-shipped">Shipped</span>
+                    <span>Order shipped, in transit</span>
+                </label>
+                <label class="status-option" onclick="selectStatus('delivered')">
+                    <input type="radio" name="status" value="delivered">
+                    <span class="status-badge status-delivered">Delivered</span>
+                    <span>Order delivered to customer</span>
+                </label>
+                <label class="status-option" onclick="selectStatus('completed')">
+                    <input type="radio" name="status" value="completed">
+                    <span class="status-badge status-completed">Completed</span>
+                    <span>Order completed - Ready for receipt</span>
+                </label>
+            </div>
+            <div class="status-modal-actions">
+                <button class="btn btn-secondary" onclick="closeStatusModal()">Cancel</button>
+                <button class="btn btn-success" onclick="updateOrderStatus()">Update Status</button>
+            </div>
         </div>
     </div>
 
@@ -1370,6 +1753,369 @@
 
         // Initialize app
         checkAuth();
+        
+        // ==================== ORDER MANAGEMENT FUNCTIONS ====================
+        
+        let currentOrderId = null;
+        let allOrders = [];
+        let filteredOrders = [];
+        
+        // Load orders from Firebase
+        async function loadOrders() {
+            try {
+                console.log('Loading orders from Firebase...');
+                console.log('Firebase app:', firebase.app());
+                console.log('Firestore instance:', db);
+                console.log('Current user:', currentUser);
+                
+                const ordersContent = document.getElementById('orders-content');
+                
+                // Show loading state
+                ordersContent.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading orders...</p>
+                    </div>
+                `;
+                
+                // Test Firebase connection first
+                if (!db) {
+                    throw new Error('Firestore database not initialized');
+                }
+                
+                // Fetch orders from Firebase
+                console.log('Attempting to fetch orders...');
+                const ordersSnapshot = await db.collection('orders').orderBy('createdAt', 'desc').get();
+                
+                if (ordersSnapshot.empty) {
+                    console.log('No orders found');
+                    ordersContent.innerHTML = `
+                        <div class="no-orders">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h3>No Orders Found</h3>
+                            <p>No orders have been placed yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Process orders
+                allOrders = [];
+                ordersSnapshot.forEach((doc) => {
+                    const order = doc.data();
+                    allOrders.push({ id: doc.id, ...order });
+                });
+                
+                // Initially show all orders
+                filteredOrders = [...allOrders];
+                renderOrders();
+                
+                // Update dashboard stats
+                updateOrderStats();
+                
+                console.log('Orders loaded successfully:', allOrders.length);
+                
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    code: error.code,
+                    stack: error.stack
+                });
+                
+                let errorMessage = 'Failed to load orders. ';
+                if (error.code === 'permission-denied') {
+                    errorMessage += 'Permission denied. Please check Firebase security rules.';
+                } else if (error.code === 'unavailable') {
+                    errorMessage += 'Firebase is unavailable. Please check your internet connection.';
+                } else if (error.message.includes('Firestore database not initialized')) {
+                    errorMessage += 'Firebase not properly initialized.';
+                } else {
+                    errorMessage += `Error: ${error.message}`;
+                }
+                
+                document.getElementById('orders-content').innerHTML = `
+                    <div class="no-orders">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Orders</h3>
+                        <p>${errorMessage}</p>
+                        <button class="btn btn-primary" onclick="loadOrders()">Retry</button>
+                        <button class="btn btn-secondary" onclick="testFirebaseConnection()">Test Firebase</button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Render orders list
+        function renderOrders() {
+            const ordersContent = document.getElementById('orders-content');
+            
+            if (filteredOrders.length === 0) {
+                ordersContent.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fas fa-search"></i>
+                        <h3>No Orders Found</h3>
+                        <p>No orders match your search criteria.</p>
+                        <button class="btn btn-primary" onclick="clearSearch()">Clear Search</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            ordersContent.innerHTML = filteredOrders.map(order => `
+                <div class="order-item">
+                    <div class="order-header">
+                        <div class="order-id">${order.orderId || order.id}</div>
+                        <div class="order-date">${formatOrderDate(order.createdAt)}</div>
+                    </div>
+                    ${order.orderId && order.orderId !== order.id ? `
+                        <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                            Firebase ID: ${order.id}
+                        </div>
+                    ` : ''}
+                    <div class="order-details">
+                        <div class="customer-info">
+                            <h4>${order.customerName || 'Unknown Customer'}</h4>
+                            <p>${order.customerPhone || 'No phone'}</p>
+                            <p>${order.customerState || 'No state'}</p>
+                        </div>
+                        <div class="order-summary">
+                            <h4>₦${(order.totalAmount || 0).toLocaleString()}</h4>
+                            <p>${order.totalItems || 0} item(s)</p>
+                        </div>
+                        <div class="status-section">
+                            <div class="status-badge status-${order.status || 'pending'}">${(order.status || 'pending').charAt(0).toUpperCase() + (order.status || 'pending').slice(1)}</div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-primary btn-sm" onclick="viewOrder('${order.id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="openStatusModal('${order.id}')">
+                                <i class="fas fa-edit"></i> Update Status
+                            </button>
+                            ${(order.status || 'pending') === 'completed' ? `
+                                <button class="btn btn-success btn-sm" onclick="printReceipt('${order.id}')">
+                                    <i class="fas fa-print"></i> Print Receipt
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Format order date
+        function formatOrderDate(timestamp) {
+            if (!timestamp) return 'Unknown date';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+        
+        // Search orders
+        function searchOrders() {
+            const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            filteredOrders = allOrders.filter(order => {
+                const matchesSearch = !searchTerm || 
+                    (order.orderId && order.orderId.toLowerCase().includes(searchTerm)) ||
+                    (order.customerName && order.customerName.toLowerCase().includes(searchTerm)) ||
+                    (order.customerEmail && order.customerEmail.toLowerCase().includes(searchTerm));
+                
+                const matchesStatus = !statusFilter || (order.status || 'pending') === statusFilter;
+                
+                return matchesSearch && matchesStatus;
+            });
+            
+            renderOrders();
+        }
+        
+        // Clear search
+        function clearSearch() {
+            document.getElementById('orderSearch').value = '';
+            document.getElementById('statusFilter').value = '';
+            filteredOrders = [...allOrders];
+            renderOrders();
+        }
+        
+        // View order details
+        function viewOrder(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (order) {
+                const orderDetailsUrl = `order-details.html?orderId=${order.orderId || order.id}&status=${order.status || 'pending'}&name=${encodeURIComponent(order.customerName || '')}&phone=${encodeURIComponent(order.customerPhone || '')}&state=${encodeURIComponent(order.customerState || '')}`;
+                window.open(orderDetailsUrl, '_blank');
+            }
+        }
+        
+        // Open status update modal
+        function openStatusModal(orderId) {
+            currentOrderId = orderId;
+            const order = allOrders.find(o => o.id === orderId);
+            const currentStatus = order ? (order.status || 'pending') : 'pending';
+            
+            // Clear previous selections
+            document.querySelectorAll('input[name="status"]').forEach(radio => {
+                radio.checked = false;
+                radio.closest('.status-option').classList.remove('selected');
+            });
+            
+            // Select current status
+            const currentRadio = document.querySelector(`input[value="${currentStatus}"]`);
+            if (currentRadio) {
+                currentRadio.checked = true;
+                currentRadio.closest('.status-option').classList.add('selected');
+            }
+            
+            document.getElementById('statusModal').style.display = 'block';
+        }
+        
+        // Close status modal
+        function closeStatusModal() {
+            document.getElementById('statusModal').style.display = 'none';
+            currentOrderId = null;
+        }
+        
+        // Select status option
+        function selectStatus(status) {
+            // Clear previous selections
+            document.querySelectorAll('.status-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            event.currentTarget.classList.add('selected');
+            event.currentTarget.querySelector('input').checked = true;
+        }
+        
+        // Update order status
+        async function updateOrderStatus() {
+            if (!currentOrderId) return;
+            
+            const selectedStatus = document.querySelector('input[name="status"]:checked');
+            if (!selectedStatus) {
+                alert('Please select a status');
+                return;
+            }
+            
+            const newStatus = selectedStatus.value;
+            
+            try {
+                // Update order in Firebase
+                await db.collection('orders').doc(currentOrderId).update({
+                    status: newStatus,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update local array
+                const orderIndex = allOrders.findIndex(o => o.id === currentOrderId);
+                if (orderIndex !== -1) {
+                    allOrders[orderIndex].status = newStatus;
+                    allOrders[orderIndex].updatedAt = new Date();
+                    
+                    // Update filtered orders if it exists there
+                    const filteredIndex = filteredOrders.findIndex(o => o.id === currentOrderId);
+                    if (filteredIndex !== -1) {
+                        filteredOrders[filteredIndex].status = newStatus;
+                        filteredOrders[filteredIndex].updatedAt = new Date();
+                    }
+                }
+                
+                // Show success message
+                alert(`Order ${currentOrderId} status updated to ${newStatus.toUpperCase()}`);
+                
+                // Refresh the orders list
+                renderOrders();
+                
+                // Close modal
+                closeStatusModal();
+                
+                // Update dashboard stats
+                updateOrderStats();
+                
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                alert('Failed to update order status. Please try again.');
+            }
+        }
+        
+        // Print receipt
+        function printReceipt(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (order) {
+                const orderDetailsUrl = `order-details.html?orderId=${order.orderId || order.id}&status=completed&print=true&name=${encodeURIComponent(order.customerName || '')}&phone=${encodeURIComponent(order.customerPhone || '')}&state=${encodeURIComponent(order.customerState || '')}`;
+                window.open(orderDetailsUrl, '_blank');
+            }
+        }
+        
+        // Export orders
+        function exportOrders() {
+            const csvContent = generateOrdersCSV(filteredOrders);
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `orders-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Generate CSV content
+        function generateOrdersCSV(orders) {
+            const headers = ['Order ID', 'Customer Name', 'Phone', 'State', 'Total Amount', 'Items', 'Status', 'Date'];
+            const rows = orders.map(order => [
+                order.orderId || order.id,
+                order.customerName || '',
+                order.customerPhone || '',
+                order.customerState || '',
+                order.totalAmount || 0,
+                order.totalItems || 0,
+                order.status || 'pending',
+                formatOrderDate(order.createdAt)
+            ]);
+            
+            return [headers, ...rows].map(row => row.join(',')).join('\n');
+        }
+        
+        // Update order statistics
+        function updateOrderStats() {
+            const totalOrders = allOrders.length;
+            const completedOrders = allOrders.filter(o => o.status === 'completed').length;
+            const totalRevenue = allOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+            const uniqueCustomers = new Set(allOrders.map(o => o.customerEmail)).size;
+            
+            document.getElementById('total-orders').textContent = totalOrders;
+            document.getElementById('total-revenue').textContent = `₦${totalRevenue.toLocaleString()}`;
+            document.getElementById('total-customers').textContent = uniqueCustomers;
+        }
+        
+        // Close status modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('statusModal');
+            if (e.target === modal) {
+                closeStatusModal();
+            }
+        });
+        
+        // Load orders when orders section is accessed
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener for orders navigation
+            const ordersNav = document.querySelector('[data-section="orders"]');
+            if (ordersNav) {
+                ordersNav.addEventListener('click', function() {
+                    setTimeout(() => {
+                        if (document.getElementById('orders').classList.contains('active')) {
+                            loadOrders();
+                        }
+                    }, 100);
+                });
+            }
+        });
     </script>
 </body>
 </html>
