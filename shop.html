@@ -620,7 +620,7 @@
         }
         
         /* Cart Styles */
-        .cart-toggle {
+        .cart-icon {
             position: relative;
             background: none;
             border: none;
@@ -629,10 +629,13 @@
             cursor: pointer;
             transition: color 0.3s;
             margin-right: 15px;
+            padding: 8px;
+            border-radius: 50%;
         }
         
-        .cart-toggle:hover {
+        .cart-icon:hover {
             color: var(--accent);
+            background: var(--primary);
         }
         
         .cart-count {
@@ -1144,7 +1147,7 @@
                     </div>
                 </nav>
                 <div class="icons">
-                    <button id="cart-toggle" class="cart-toggle">
+                    <button id="cart-icon" class="cart-icon" onclick="openCart()">
                         <i class="fas fa-shopping-cart"></i>
                         <span id="cart-count" class="cart-count">0</span>
                     </button>
@@ -1541,9 +1544,19 @@ Thank you! 😊`;
             loadAllProducts();
         });
 
+        // Add to cart function
+        function addToCart(product) {
+            if (window.cart) {
+                window.cart.addItem(product);
+            } else {
+                console.error('Cart not initialized');
+            }
+        }
+
         // Make functions globally available
         window.orderViaWhatsApp = orderViaWhatsApp;
         window.applyFilters = applyFilters;
+        window.addToCart = addToCart;
     </script>
 </body>
 </html>

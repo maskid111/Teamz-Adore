@@ -498,11 +498,20 @@ Thank you! 😊`;
                     </div>
                 `;
 
-                // Fetch accessories from Firebase
-                const accessoriesSnapshot = await db.collection('products')
-                    .where('category', '==', 'accessories')
-                    .orderBy('createdAt', 'desc')
-                    .get();
+                // Try to fetch accessories from Firebase
+                let accessoriesSnapshot;
+                try {
+                    accessoriesSnapshot = await db.collection('products')
+                        .where('category', '==', 'accessories')
+                        .orderBy('createdAt', 'desc')
+                        .get();
+                } catch (firebaseError) {
+                    console.log('Firebase query failed, trying without orderBy:', firebaseError);
+                    // Try without orderBy if it fails
+                    accessoriesSnapshot = await db.collection('products')
+                        .where('category', '==', 'accessories')
+                        .get();
+                }
                 
                 console.log('Accessories snapshot:', accessoriesSnapshot);
                 console.log('Number of accessories:', accessoriesSnapshot.size);
@@ -520,16 +529,16 @@ Thank you! 😊`;
                     return;
                 }
 
-                // Clear loading and render accessories
+                // Clear loading and render accessories from Firebase
                 productsContainer.innerHTML = '';
                 accessoriesSnapshot.forEach((doc) => {
-                    const product = doc.data();
+                    const product = { id: doc.id, ...doc.data() };
                     console.log('Processing accessory:', product);
                     const productElement = createProductElement(product);
                     productsContainer.appendChild(productElement);
                 });
                 
-                console.log('Accessories loaded successfully');
+                console.log('Accessories loaded successfully from Firebase');
 
             } catch (error) {
                 console.error('Error loading accessories:', error);
