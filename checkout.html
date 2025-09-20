@@ -515,6 +515,23 @@
             
             .order-summary {
                 position: static;
+                padding-bottom: 90px; /* ensure space for checkout button on mobile */
+            }
+
+            /* Ensure checkout button is visible above mobile UI (safe area) */
+            .checkout-btn {
+                margin-bottom: 16px;
+                padding: 18px 16px;
+                border-radius: 10px;
+                position: relative;
+                z-index: 10;
+            }
+
+            /* Add extra safe-area spacing for devices with on-screen nav */
+            .order-summary::after {
+                content: '';
+                display: block;
+                height: env(safe-area-inset-bottom, 16px);
             }
         }
     </style>
