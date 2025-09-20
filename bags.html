@@ -490,9 +490,9 @@
             <p>Discover our elegant collection of bags</p>
         </div>
 
-        <div style="text-align: center; margin-bottom: 20px;">
+        <!-- <div style="text-align: center; margin-bottom: 20px;">
             <button onclick="loadBags()" style="padding: 10px 20px; background: #e83e8c; color: white; border: none; border-radius: 5px; cursor: pointer;">Reload Bags</button>
-        </div>
+        </div> -->
 
         <div id="products-container">
             <div class="loading">
@@ -550,20 +550,31 @@
                 <div class="product-img">
                     <img src="${getProductImage(product.imageUrl)}" alt="${product.name}" loading="lazy">
                     <div class="product-overlay">
-                        <a href="#" class="product-btn" onclick="orderViaWhatsApp('${product.name}', ${product.price})">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
+                        <button class="product-btn add-to-cart-btn" type="button">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
                     </div>
                 </div>
                 <div class="product-details">
                     <div class="product-category">${category}</div>
                     <h3 class="product-title">${product.name}</h3>
                     <p class="product-description">${description}</p>
-                    <p class="product-price">₦${product.price.toLocaleString()}</p>
+                    <p class="product-price">₦${Number(product.price || 0).toLocaleString()}</p>
                     <p class="product-stock">Stock: ${stock} available</p>
                 </div>
             `;
             
+            const addBtn = productDiv.querySelector('.add-to-cart-btn');
+            if (addBtn) {
+                addBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (window.addToCart && typeof window.addToCart === 'function') {
+                        const payload = { id: product.id || '', name: product.name || '', price: Number(product.price || 0), imageUrl: product.imageUrl || '', category: product.category || '', stock: product.stock || 0 };
+                        try { window.addToCart(payload); } catch (err) { console.error(err); }
+                    }
+                });
+            }
+
             return productDiv;
         }
 
@@ -638,7 +649,7 @@ Thank you! 😊`;
                 // Clear loading and render bags
                 productsContainer.innerHTML = '';
                 bagsSnapshot.forEach((doc) => {
-                    const product = doc.data();
+                    const product = { id: doc.id, ...doc.data() };
                     console.log('Processing bag:', product);
                     const productElement = createProductElement(product);
                     productsContainer.appendChild(productElement);
@@ -669,5 +680,6 @@ Thank you! 😊`;
         window.orderViaWhatsApp = orderViaWhatsApp;
         window.loadBags = loadBags;
     </script>
+    <script src="cart.js"></script>
 </body>
 </html>

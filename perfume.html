@@ -725,9 +725,10 @@
             <p>Discover our beautiful collection of premium perfumes</p>
         </div>
 
-        <div style="text-align: center; margin-bottom: 20px;">
+        <!-- <div style="text-align: center; margin-bottom: 20px;">
             <button onclick="loadProducts()" style="padding: 10px 20px; background: #e83e8c; color: white; border: none; border-radius: 5px; cursor: pointer;">Reload Perfume</button>
-        </div>
+        </div> -->
+        <br>
 
         <div id="products-container">
             <div class="loading">
@@ -811,7 +812,7 @@
                     <div class="product-category">${category}</div>
                     <h3 class="product-title">${product.name}</h3>
                     <p class="product-description">${description}</p>
-                    <p class="product-price">₦${product.price.toLocaleString()}</p>
+                    <p class="product-price">₦${Number(product.price || 0).toLocaleString()}</p>
                     <p class="product-stock">Stock: ${stock} available</p>
                 </div>
             `;
