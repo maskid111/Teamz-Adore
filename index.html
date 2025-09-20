@@ -514,7 +514,6 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s;
-            cursor: pointer;
         }
         
         .product:hover .product-overlay {
@@ -645,7 +644,7 @@
         }
         
         .testimonial-author {
-            font-weight: 6 00;
+            font-weight: 600;
             color: var(--accent);
         }
         
@@ -941,9 +940,6 @@
             border-top: 1px solid #eee;
             flex-shrink: 0;
             background-color: var(--light);
-            position: sticky;
-            bottom: 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         }
         
         .cart-total {
@@ -1036,18 +1032,21 @@
                 right: -100%;
             }
             
-            .cart-footer {
-                padding: 15px;
-                position: sticky;
-                bottom: 0;
-                background: white;
-                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            .cart-items {
+                padding-bottom: 160px; /* Added space for footer */
+                max-height: calc(100vh - 60px);
+                overflow-y: auto;
             }
             
-            .cart-items {
-                padding-bottom: 70px; /* Space for footer */
-                max-height: calc(100vh - 160px);
-                overflow-y: auto;
+            .cart-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 15px;
+                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1001;
             }
             
             .cart-actions {
@@ -1453,7 +1452,7 @@
                 </div>
             </div>
             <div class="category">
-                <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto-format&fit=crop&w=774&q=80" alt="Skincare">
+                <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Skincare">
                 <div class="category-overlay">
                     <h3>Skincare</h3>
                     <a href="skincare.html">View Collection</a>
