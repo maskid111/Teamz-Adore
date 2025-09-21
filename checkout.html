@@ -607,13 +607,13 @@
         // Initialize Firebase (you need to add your config here)
         // This is a placeholder - you need to add your actual Firebase config
         const firebaseConfig = {
-  apiKey: "AIzaSyDmDGQC3hsDoHvepmlHkvimX8DUg0X-hYY",
-  authDomain: "teamz-adore-d76ad.firebaseapp.com",
-  projectId: "teamz-adore-d76ad",
-  storageBucket: "teamz-adore-d76ad.firebasestorage.app",
-  messagingSenderId: "99067685820",
-  appId: "1:99067685820:web:62cda395f0a1ebc99fd9b9"
-};
+            apiKey: "AIzaSyDmDGQC3hsDoHvepmlHkvimX8DUg0X-hYY",
+            authDomain: "teamz-adore-d76ad.firebaseapp.com",
+            projectId: "teamz-adore-d76ad",
+            storageBucket: "teamz-adore-d76ad.firebasestorage.app",
+            messagingSenderId: "99067685820",
+            appId: "1:99067685820:web:62cda395f0a1ebc99fd9b9"
+        };
         
         // Initialize Firebase
         if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
@@ -869,9 +869,22 @@
             // Save order to Firebase
             await saveOrderToFirebase(orderId, formData, cart);
             
-            // Open WhatsApp
+            // Open WhatsApp with improved iOS compatibility
             const whatsappURL = `https://wa.me/2348139106521?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
+            try {
+                // Create a temporary anchor element for iOS compatibility
+                const link = document.createElement('a');
+                link.href = whatsappURL;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                console.error('Error opening WhatsApp:', error);
+                // Fallback: redirect to WhatsApp URL
+                window.location.href = whatsappURL;
+            }
         }
 
         // Generate order ID
