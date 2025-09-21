@@ -650,7 +650,6 @@
             color: var(--accent);
         }
         
-        
         /* Footer */
         footer {
             background-color: var(--dark);
@@ -788,7 +787,7 @@
             top: 0;
             right: -400px;
             width: 400px;
-            height: 100vh;
+            height: 100%;
             background-color: var(--light);
             box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
             z-index: 1000;
@@ -1042,20 +1041,14 @@
                 flex: 1;
                 overflow-y: auto;
                 padding: 20px;
-                padding-bottom: 160px; /* Increased padding to account for footer */
-                max-height: calc(100vh - 60px);
-                max-height: calc(var(--vh, 1vh) * 100 - 60px);
+                max-height: calc(100vh - 140px); /* Adjusted for header and footer */
+                max-height: calc(var(--vh, 1vh) * 100 - 140px);
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
             }
             
             .cart-footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: white;
                 padding: 15px;
                 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-                z-index: 1001;
             }
             
             .cart-actions {
@@ -1081,9 +1074,8 @@
         /* Additional fix for mobile viewport height issues */
         @media (max-height: 700px) and (max-width: 768px) {
             .cart-items {
-                padding-bottom: 140px;
-                max-height: calc(100vh - 50px);
-                max-height: calc(var(--vh, 1vh) * 100 - 50px);
+                max-height: calc(100vh - 120px);
+                max-height: calc(var(--vh, 1vh) * 100 - 120px);
             }
             
             .cart-footer {
@@ -1267,8 +1259,6 @@
                 font-size: 28px;
             }
             
-            
-            
             .product-img {
                 height: 200px;
             }
@@ -1391,7 +1381,6 @@
                             <li><a href="shop.html">Shop</a></li>
                             <li><a href="about.html">About</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
-                            
                         </ul>
                     </div>
                     <div class="nav-section">
@@ -1561,7 +1550,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- Footer -->
     <footer>
