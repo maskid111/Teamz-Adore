@@ -327,6 +327,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            touch-action: manipulation; /* Ensure touch events are handled correctly on iOS */
         }
         
         .checkout-btn:hover {
@@ -781,13 +782,23 @@
                                 <span>${cart.getTotalItems()}</span>
                             </div>
                         </div>
-                        <button class="checkout-btn" onclick="proceedToWhatsApp()">
+                        <button class="checkout-btn" id="whatsapp-checkout-btn">
                             <i class="fab fa-whatsapp"></i>
                             Complete Order via WhatsApp
                         </button>
                     </div>
                 </div>
             `;
+            
+            // Add event listener to the WhatsApp button
+            const whatsappButton = document.getElementById('whatsapp-checkout-btn');
+            if (whatsappButton) {
+                whatsappButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default touch behavior
+                    console.log('WhatsApp button clicked'); // Debug log
+                    proceedToWhatsApp();
+                });
+            }
         }
 
         function renderOrderItems() {
@@ -809,6 +820,7 @@
         }
 
         async function proceedToWhatsApp() {
+            console.log('proceedToWhatsApp function called'); // Debug log
             const form = document.getElementById('checkout-form');
             const formData = new FormData(form);
             
@@ -869,21 +881,14 @@
             // Save order to Firebase
             await saveOrderToFirebase(orderId, formData, cart);
             
-            // Open WhatsApp with improved iOS compatibility
+            // Open WhatsApp with direct navigation for better iOS compatibility
             const whatsappURL = `https://wa.me/2348139106521?text=${encodeURIComponent(message)}`;
             try {
-                // Create a temporary anchor element for iOS compatibility
-                const link = document.createElement('a');
-                link.href = whatsappURL;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                console.log('Attempting to open WhatsApp URL:', whatsappURL); // Debug log
+                window.location.href = whatsappURL; // Direct navigation
             } catch (error) {
                 console.error('Error opening WhatsApp:', error);
-                // Fallback: redirect to WhatsApp URL
-                window.location.href = whatsappURL;
+                alert('Unable to open WhatsApp. Please ensure WhatsApp is installed or try again.');
             }
         }
 
