@@ -604,7 +604,7 @@
             margin-bottom: 30px;
         }
         
-        .back-btn {
+        .retry-btn {
             display: inline-block;
             background-color: var(--accent);
             color: var(--light);
@@ -615,7 +615,7 @@
             transition: all 0.3s;
         }
         
-        .back-btn:hover {
+        .retry-btn:hover {
             background-color: #ce2c78;
             transform: translateY(-2px);
         }
@@ -1326,12 +1326,71 @@
             appId: "1:99067685820:web:62cda395f0a1ebc99fd9b9"
         };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Initialize Firebase with retry
+        async function initializeFirebase() {
+            let attempts = 0;
+            const maxAttempts = 3;
+            while (attempts < maxAttempts) {
+                try {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
+                    // Disable Firestore offline persistence to avoid stale cache issues
+                    const db = firebase.firestore();
+                    db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
+                    await db.disableNetwork().then(() => db.enableNetwork());
+                    console.log('Firebase initialized successfully');
+                    return db;
+                } catch (error) {
+                    attempts++;
+                    console.error(`Firebase initialization attempt ${attempts}/${maxAttempts} failed:`, {
+                        code: error.code || 'N/A',
+                        message: error.message || 'Unknown error',
+                        stack: error.stack || 'No stack trace'
+                    });
+                    if (attempts === maxAttempts) {
+                        console.error('Max Firebase initialization attempts reached');
+                        document.getElementById('products-container').innerHTML = `
+                            <div class="error-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h2>Error Connecting to Database</h2>
+                                <p>Unable to connect to our database: ${error.message || 'Unknown error'}. Please check your internet connection and try again.</p>
+                                <button class="retry-btn" onclick="loadAllProducts()">Retry</button>
+                            </div>
+                        `;
+                        return null;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 1000 * attempts)); // Exponential backoff
+                }
+            }
+        }
 
         let allProducts = [];
         let filteredProducts = [];
+
+        // Fallback mock products
+        const mockProducts = [
+            {
+                id: 'mock1',
+                name: 'Sample Product 1',
+                price: 10000,
+                imageUrl: 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=Sample+1',
+                category: 'general',
+                description: 'A sample product for display purposes.',
+                stock: 10,
+                createdAt: new Date()
+            },
+            {
+                id: 'mock2',
+                name: 'Sample Product 2',
+                price: 20000,
+                imageUrl: 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=Sample+2',
+                category: 'general',
+                description: 'Another sample product for display purposes.',
+                stock: 5,
+                createdAt: new Date()
+            }
+        ];
 
         // Helper function to get product image (handles base64 and placeholder)
         function getProductImage(imageUrl) {
@@ -1339,9 +1398,7 @@
                 return 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=No+Image';
             }
             
-            if (imageUrl.startsWith('data:image/')) {
-                return imageUrl;
-            } else if (imageUrl.startsWith('https://via.placeholder.com/')) {
+            if (imageUrl.startsWith('data:image/') || imageUrl.startsWith('https://')) {
                 return imageUrl;
             } else {
                 return 'https://via.placeholder.com/300x300/ff69b4/ffffff?text=No+Image';
@@ -1401,62 +1458,141 @@ Please provide me with:
 
 Thank you! 😊`;
             const whatsappURL = `https://wa.me/2348139106521?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
+            window.location.href = whatsappURL; // Use direct navigation for better iOS compatibility
         }
 
-        // Load all products from Firebase
+        // Load all products from Firebase with retry and timeout
         async function loadAllProducts() {
-            try {
-                console.log('Loading all products from Firebase...');
-                const productsContainer = document.getElementById('products-container');
-                
-                // Show loading state
-                productsContainer.innerHTML = `
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading products...</p>
-                    </div>
-                `;
+            const productsContainer = document.getElementById('products-container');
+            
+            // Show loading state
+            productsContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading products...</p>
+                </div>
+            `;
 
-                const productsSnapshot = await db.collection('products').orderBy('createdAt', 'desc').get();
-                
-                if (productsSnapshot.empty) {
-                    console.log('No products found');
-                    productsContainer.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-shopping-bag"></i>
-                            <h2>No Products Available</h2>
-                            <p>We're working on adding more products to our collection. Check back soon!</p>
-                            <a href="index.html" class="back-btn">Back to Home</a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Store all products
-                allProducts = [];
-                productsSnapshot.forEach((doc) => {
-                    const product = doc.data();
-                    allProducts.push({ id: doc.id, ...product });
-                });
-
-                // Initially show all products
+            // Initialize Firebase if not already done
+            const db = await initializeFirebase();
+            if (!db) {
+                console.error('Failed to initialize Firebase, falling back to mock products');
+                allProducts = mockProducts;
                 filteredProducts = [...allProducts];
                 renderProducts();
+                return;
+            }
 
-                console.log('All products loaded successfully');
+            const maxAttempts = 3;
+            let attempts = 0;
 
-            } catch (error) {
-                console.error('Error loading products:', error);
-                console.error('Error details:', error.message);
-                document.getElementById('products-container').innerHTML = `
-                    <div class="error-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h2>Error Loading Products</h2>
-                        <p>We're having trouble loading our products. Please try again later.</p>
-                        <a href="index.html" class="back-btn">Back to Home</a>
-                    </div>
-                `;
+            // Set a timeout for the entire operation (20 seconds)
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timed out')), 20000);
+            });
+
+            while (attempts < maxAttempts) {
+                try {
+                    console.log(`Attempting to load products from Firebase (Attempt ${attempts + 1}/${maxAttempts})...`);
+                    
+                    // Test if collection exists
+                    let testDoc;
+                    try {
+                        testDoc = await Promise.race([
+                            db.collection('products').limit(1).get(),
+                            timeoutPromise
+                        ]);
+                    } catch (testError) {
+                        throw new Error(`Failed to access products collection: ${testError.message || 'Unknown error'}`);
+                    }
+
+                    if (!testDoc) {
+                        throw new Error('No response from Firestore');
+                    }
+
+                    const productsSnapshot = await Promise.race([
+                        db.collection('products').get(),
+                        timeoutPromise
+                    ]);
+
+                    if (productsSnapshot.empty) {
+                        console.log('No products found in Firestore');
+                        productsContainer.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-shopping-bag"></i>
+                                <h2>No Products Available</h2>
+                                <p>We're working on adding more products to our collection. Check back soon!</p>
+                                <a href="index.html" class="back-btn">Back to Home</a>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    // Store all products
+                    allProducts = [];
+                    productsSnapshot.forEach((doc) => {
+                        const product = doc.data();
+                        // Ensure required fields exist with fallbacks
+                        allProducts.push({
+                            id: doc.id,
+                            name: product.name || 'Unnamed Product',
+                            price: product.price || 0,
+                            imageUrl: product.imageUrl || '',
+                            category: product.category || 'general',
+                            description: product.description || '',
+                            stock: product.stock || 0,
+                            createdAt: product.createdAt ? product.createdAt.toDate() : new Date()
+                        });
+                    });
+
+                    console.log('Fetched products:', allProducts);
+
+                    // Initially show all products
+                    filteredProducts = [...allProducts];
+                    renderProducts();
+
+                    console.log('All products loaded successfully');
+                    return;
+
+                } catch (error) {
+                    attempts++;
+                    console.error(`Error loading products (Attempt ${attempts}/${maxAttempts}):`, {
+                        code: error.code || 'N/A',
+                        message: error.message || 'Unknown error',
+                        stack: error.stack || 'No stack trace'
+                    });
+
+                    if (attempts === maxAttempts) {
+                        let errorMessage = 'Unable to load products. Please try again.';
+                        if (error.code === 'permission-denied') {
+                            errorMessage = 'Access to products is restricted. Please check your database permissions.';
+                        } else if (error.message.includes('timeout')) {
+                            errorMessage = 'Request to load products timed out. Please check your internet connection.';
+                        } else if (error.message.includes('Failed to access products collection') || error.message.includes('No response from Firestore')) {
+                            errorMessage = 'The products collection may not exist or is inaccessible. Please check your database setup.';
+                        }
+
+                        console.warn('Falling back to mock products due to repeated failures');
+                        allProducts = mockProducts;
+                        filteredProducts = [...allProducts];
+                        renderProducts();
+
+                        productsContainer.innerHTML = `
+                            <div class="error-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h2>Error Loading Products</h2>
+                                <p>${errorMessage} Showing sample products instead.</p>
+                                <button class="retry-btn" onclick="loadAllProducts()">Retry</button>
+                            </div>
+                        `;
+                        // Append mock products after error message
+                        renderProducts();
+                        return;
+                    }
+
+                    // Exponential backoff before retry
+                    await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
+                }
             }
         }
 
@@ -1475,7 +1611,10 @@ Thank you! 😊`;
                 return;
             }
 
-            productsContainer.innerHTML = '';
+            // Clear only the loading or error state, preserve error message if present
+            if (!productsContainer.querySelector('.error-state')) {
+                productsContainer.innerHTML = '';
+            }
             filteredProducts.forEach((product, index) => {
                 const productElement = createProductElement(product, product.id);
                 productElement.style.animationDelay = `${index * 0.1}s`;
@@ -1556,7 +1695,7 @@ Thank you! 😊`;
         });
 
         // Mobile menu toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
             const nav = document.querySelector('.main-nav');
             
@@ -1585,7 +1724,7 @@ Thank you! 😊`;
                 });
             }
             
-            loadAllProducts();
+            await loadAllProducts();
         });
 
         // Add to cart function
